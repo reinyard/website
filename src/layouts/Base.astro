@@ -1,0 +1,56 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import sans400 from '../styles/fonts/ibm-plex-sans-latin-400-normal.woff2?url';
+import sans600 from '../styles/fonts/ibm-plex-sans-latin-600-normal.woff2?url';
+
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  noindex?: boolean;
+}
+const { title, description, path, noindex = false } = Astro.props;
+const url = new URL(path, 'https://reinyard.com').href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#f0f4f7" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#282f34" media="(prefers-color-scheme: dark)" />
+    <link rel="canonical" href={url} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="preload" href={sans400} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={sans600} as="font" type="font/woff2" crossorigin />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Reinyard" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={url} />
+    <meta name="twitter:card" content="summary" />
+    <!-- Sets the theme before first paint. Same key and values as Starlight, so the docs share the choice. -->
+    <script is:inline>
+      (function () {
+        try {
+          var s = localStorage.getItem('starlight-theme');
+          var t = s || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+          document.documentElement.dataset.theme = t === 'light' ? 'light' : 'dark';
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <Nav />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

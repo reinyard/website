@@ -1,0 +1,65 @@
+@import './fonts.css';
+@import './tokens.css';
+
+/* Starlight, driven by the same tokens as the rest of the site, so docs and landing share one palette
+   and one theme switch. Starlight inverts its gray scale between themes: "white" is the strongest text
+   color, "black" is the page background. */
+:root {
+  --sl-font: var(--sans);
+  --sl-font-mono: var(--mono);
+  --sl-content-width: 46rem;
+  --sl-nav-height: 4.25rem;
+  --sl-text-h1: 2rem;
+  --sl-text-h2: 1.5rem;
+  --sl-text-h3: 1.2rem;
+  --sl-text-h4: 1rem;
+
+  --sl-color-white: var(--ink);
+  --sl-color-gray-1: var(--ink-2);
+  --sl-color-gray-2: var(--ink-2);
+  --sl-color-gray-3: var(--muted);
+  --sl-color-gray-4: color-mix(in srgb, var(--muted) 65%, var(--bg));
+  --sl-color-gray-5: var(--line);
+  --sl-color-gray-6: var(--bg-3);
+  --sl-color-gray-7: var(--bg-2);
+  --sl-color-black: var(--bg);
+  --sl-color-accent-low: var(--a-2);
+  --sl-color-accent: var(--accent);
+  --sl-color-accent-high: var(--blue-text);
+  --sl-color-text-invert: var(--on-accent);
+  /* asides (:::note) use Starlight's blue; map it to the accent and its tints */
+  --sl-color-blue-high: var(--blue-text);
+  --sl-color-blue: var(--blue-text);
+  --sl-color-blue-low: var(--a-1);
+  --sl-color-bg-nav: var(--bg);
+  --sl-color-bg-sidebar: var(--bg);
+  --sl-color-hairline: var(--line);
+  --sl-color-hairline-light: var(--line);
+  --sl-color-hairline-shade: var(--line);
+}
+
+/* Sidebar: the page background, with an accent-tinted active item, so the docs read as part of the site. */
+.sidebar-pane a[aria-current='page'] {
+  color: var(--blue-text);
+  background: var(--a-2);
+  font-weight: 600;
+}
+.sidebar-pane a:hover {
+  background: var(--bg-3);
+}
+.sidebar-pane {
+  border-inline-end-color: var(--line);
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+.sl-markdown-content :not(pre) > code {
+  border-radius: 6px;
+}
+header.header {
+  border-bottom: 1px solid var(--line);
+}

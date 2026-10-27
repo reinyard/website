@@ -1,0 +1,18 @@
+---
+// Used in the docs mobile drawer: the GitHub mark plus the name.
+import GithubIcon from './GithubIcon.astro';
+---
+<a href="https://github.com/reinyard" rel="noopener"><GithubIcon size={18} />GitHub</a>
+<style>
+  a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    color: var(--ink-2);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  a:hover {
+    color: var(--blue-text);
+  }
+</style>

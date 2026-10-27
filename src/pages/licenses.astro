@@ -1,0 +1,130 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+import Base from '../layouts/Base.astro';
+
+// Notices come straight from the installed packages, so they cannot drift from what ships.
+const read = (p: string) => fs.readFileSync(path.join(process.cwd(), 'node_modules', p), 'utf8');
+const plexSans = read('@fontsource/ibm-plex-sans/LICENSE');
+const plexMono = read('@fontsource/ibm-plex-mono/LICENSE');
+const firstLine = (t: string) => t.split('\n')[0].replace(/\s+[A-Za-z0-9]+(?:-[A-Za-z]+)*(?:\[[^\]]*\])?\.ttf:.*$/, '').trim();
+// The license text proper, from "This Font Software is licensed ..." onwards.
+const ofl = plexSans.slice(plexSans.indexOf('This Font Software is licensed'));
+// The MIT permission text, taken from a package whose LICENSE file is the plain MIT license (Astro's own file also
+// carries unrelated third-party notices, which must not be presented as part of this one).
+const mitFile = read('@astrojs/starlight/LICENSE');
+const mit = mitFile.slice(mitFile.indexOf('Permission is hereby granted')).trim();
+
+const mitProjects = [
+  { name: 'Astro', copy: 'Copyright (c) 2021 Fred K. Schott', use: 'static site generator and link prefetching' },
+  { name: 'Starlight', copy: 'Copyright (c) 2023 Astro contributors', use: 'documentation framework, its scripts and bundled icons' },
+  { name: 'Expressive Code', copy: 'Copyright (c) 2023 Tibor Schiemann', use: 'code blocks in the documentation' },
+  { name: 'Pagefind', copy: 'Copyright (c) Pagefind', use: 'documentation search' },
+];
+---
+
+<Base
+  title="Licenses · Reinyard"
+  description="Open-source software and fonts used on reinyard.com, with their licenses."
+  path="/licenses/"
+>
+  <section class="wrap page">
+    <span class="label">Legal</span>
+    <h1>Licenses</h1>
+    <p class="lead">
+      The Reinyard website uses the open-source fonts and software below. Each is free to use, including commercially,
+      and each license asks that its notice travels with the work. The notices are reproduced here.
+    </p>
+
+    <h2>Fonts</h2>
+    <p>
+      Text is set in <b>IBM Plex Sans</b> and <b>IBM Plex Mono</b>, self-hosted from this site (nothing is loaded from a
+      third-party font service). Both are licensed under the SIL Open Font License, Version 1.1.
+    </p>
+    <ul class="notice">
+      <li>IBM Plex Sans: {firstLine(plexSans)}</li>
+      <li>IBM Plex Mono: {firstLine(plexMono)}</li>
+    </ul>
+    <details>
+      <summary>SIL Open Font License, Version 1.1</summary>
+      <pre>{ofl}</pre>
+    </details>
+
+    <h2>Software</h2>
+    <p>The site is built with the following MIT-licensed projects. Parts of their code run in your browser.</p>
+    <ul class="notice">
+      {mitProjects.map((p) => <li><b>{p.name}</b>, {p.use}. {p.copy}.</li>)}
+    </ul>
+    <details>
+      <summary>MIT License</summary>
+      <pre>{mit}</pre>
+    </details>
+
+    <h2>Trademarks</h2>
+    <p>
+      GitHub and the GitHub mark are trademarks of GitHub, Inc. The mark appears on this site only as a link to the Reinyard
+      GitHub organization.
+    </p>
+
+    <h2>Our own work</h2>
+    <p>
+      The Reinyard name, logo, copy, illustrations and the code of this website are © 2026 Reinyard. All rights reserved.
+    </p>
+  </section>
+</Base>
+
+<style>
+  .page {
+    max-width: 46rem;
+    padding-block: clamp(3.5rem, 8vw, 6rem);
+  }
+  h1 {
+    margin-top: 0.9rem;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+  }
+  h2 {
+    margin-top: 2.6rem;
+    font-size: 1.35rem;
+  }
+  p {
+    margin-top: 0.9rem;
+    color: var(--ink-2);
+  }
+  .lead {
+    color: var(--muted);
+  }
+  .notice {
+    margin-top: 1rem;
+    display: grid;
+    gap: 0.6rem;
+    font-size: 0.95rem;
+    color: var(--ink-2);
+  }
+  .notice li {
+    padding-left: 1rem;
+    border-left: 2px solid var(--line);
+  }
+  details {
+    margin-top: 1.1rem;
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    background: var(--bg-2);
+  }
+  summary {
+    cursor: pointer;
+    padding: 0.8rem 1rem;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  pre {
+    margin: 0;
+    padding: 0 1rem 1rem;
+    max-height: 22rem;
+    overflow: auto;
+    white-space: pre-wrap;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+</style>

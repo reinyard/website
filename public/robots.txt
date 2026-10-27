@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://reinyard.com/sitemap-index.xml

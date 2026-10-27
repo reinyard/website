@@ -1,0 +1,17 @@
+Copyright (c) 2026 Reinyard. All rights reserved.
+
+This repository is public so that the Reinyard website is transparent and easy to
+correct. It is not released under an open-source license. No permission is granted
+to copy, modify, distribute or reuse the source code, copy, illustrations,
+photographs, name or logo of Reinyard, except as expressly agreed in writing.
+
+Third-party components are not covered by the statement above and keep their own
+licenses:
+
+  - IBM Plex Sans and IBM Plex Mono: SIL Open Font License 1.1
+    (see src/styles/fonts/IBM-Plex-OFL.txt)
+  - Astro, Starlight, Expressive Code and Pagefind, and the other packages
+    listed in package.json and bun.lock: their respective licenses, mostly MIT.
+    The notices for what ships to the browser are on /licenses/ of the site.
+
+GitHub and the GitHub mark are trademarks of GitHub, Inc.

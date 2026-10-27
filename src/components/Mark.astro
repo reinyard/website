@@ -1,0 +1,44 @@
+---
+// The Reinyard mark: an agent (hexagon) held inside a yard (six brackets).
+// `tile` puts it in the rounded square the app uses (white in light mode, dark in dark mode).
+interface Props { size?: number; tile?: boolean; class?: string }
+const { size = 36, tile = true, class: cls = '' } = Astro.props;
+---
+<span class={`mark ${tile ? 'tile' : ''} ${cls}`} style={`--s:${size}px`} aria-hidden="true">
+  <svg viewBox="176 128 672 768" fill="none">
+    <g class="ring" stroke-width="66" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M297 298 221 342V430" /><path d="M727 298 803 342V430" />
+      <path d="M221 594V682L297 726" /><path d="M803 594V682L727 726" />
+      <path d="M435 220 512 176 589 220" /><path d="M435 804 512 848 589 804" />
+    </g>
+    <path class="core" d="M512 400.1 608.9 456.1V568L512 623.9 415.1 568V456.1Z" stroke-width="28" stroke-linejoin="round" />
+  </svg>
+</span>
+<style>
+  .mark {
+    display: inline-grid;
+    place-items: center;
+    height: var(--s);
+    flex: none;
+  }
+  .mark svg {
+    height: 100%;
+    width: auto;
+  }
+  .tile {
+    width: var(--s);
+    background: var(--tile);
+    border: 1px solid var(--line);
+    border-radius: calc(var(--s) * 0.24);
+  }
+  .tile svg {
+    height: 62%;
+  }
+  .ring {
+    stroke: var(--ring);
+  }
+  .core {
+    fill: var(--core);
+    stroke: var(--core);
+  }
+</style>

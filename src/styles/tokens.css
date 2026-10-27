@@ -1,0 +1,100 @@
+/* Design tokens: the single source of truth for color, type and radii, imported by global.css (the site) and
+   starlight.css (the docs). Blue-gray neutrals, one azure accent, IBM Plex.
+   The theme is set on <html data-theme="light|dark"> by an inline script in <head>, with the same key and
+   values as Starlight, so a choice made on any page carries into the docs. */
+:root {
+  --bg: #f0f4f7;
+  --bg-2: #ffffff; /* surfaces: cards, panels */
+  --bg-3: #e6edf3; /* subtle fills */
+  --ink: #152533;
+  --ink-2: #2a4259;
+  --muted: #3d678a;
+  --line: #d6e1eb;
+  --accent: #18578b; /* buttons and other fills that carry white text */
+  --accent-hover: #144772;
+  --on-accent: #ffffff;
+  --blue: #18578b; /* accent used as text, links and illustration */
+  --blue-text: #18578b;
+  --focus: #18578b;
+  --red: #c64739; /* failed runs only */
+  --ring: #45577a; /* logo brackets */
+  --core: #0a9ad0; /* logo center */
+  --cell: rgba(61, 103, 138, 0.2); /* hex field outlines */
+  --tile: #ffffff; /* logo tile */
+  --deep: #18578b; /* the app's sidebar blue, used for brand bands */
+  --on-deep: #ffffff;
+  --on-deep-muted: rgba(255, 255, 255, 0.78);
+  --deep-line: rgba(255, 255, 255, 0.24);
+
+  --sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --wrap: 1180px;
+  --gutter: clamp(1.25rem, 4vw, 2.25rem);
+  --r: 8px; /* controls */
+  --r-lg: 12px; /* cards */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --tint: var(--accent); /* what the faint blues are blended from */
+  --a-1: color-mix(in srgb, var(--tint) 6%, var(--bg-2));
+  --a-2: color-mix(in srgb, var(--tint) 11%, var(--bg-2));
+  --a-3: color-mix(in srgb, var(--tint) 30%, var(--bg-2));
+  --blue-soft: var(--a-1);
+  color-scheme: light;
+}
+:root[data-theme='dark'] {
+  --bg: #282f34;
+  --bg-2: #323b43;
+  --bg-3: #3a444d;
+  --ink: #f6f7f8;
+  --ink-2: #dde2e6;
+  --muted: #bdc5cc;
+  --line: #4d5a65;
+  --accent: #17476e;
+  --accent-hover: #1d5a8a;
+  --blue: #97ccf7;
+  --blue-text: #97ccf7;
+  --focus: #97ccf7;
+  --red: #d37369;
+  --ring: #9aa9c7;
+  --core: #5cc2f2;
+  --cell: rgba(189, 197, 204, 0.16);
+  --tile: #1f2a36;
+  --deep: #17476e;
+  --tint: var(--blue);
+  --a-1: color-mix(in srgb, var(--tint) 10%, var(--bg-2));
+  --a-2: color-mix(in srgb, var(--tint) 16%, var(--bg-2));
+  --a-3: color-mix(in srgb, var(--tint) 34%, var(--bg-2));
+  color-scheme: dark;
+}
+/* Without JS: follow the system. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --bg: #282f34;
+    --bg-2: #323b43;
+    --bg-3: #3a444d;
+    --ink: #f6f7f8;
+    --ink-2: #dde2e6;
+    --muted: #bdc5cc;
+    --line: #4d5a65;
+    --accent: #17476e;
+    --accent-hover: #1d5a8a;
+    --blue: #97ccf7;
+    --blue-text: #97ccf7;
+    --tint: var(--blue);
+    --focus: #97ccf7;
+    --red: #d37369;
+    --ring: #9aa9c7;
+    --core: #5cc2f2;
+    --cell: rgba(189, 197, 204, 0.16);
+    --tile: #1f2a36;
+    --deep: #17476e;
+    --a-1: color-mix(in srgb, var(--tint) 10%, var(--bg-2));
+    --a-2: color-mix(in srgb, var(--tint) 16%, var(--bg-2));
+    --a-3: color-mix(in srgb, var(--tint) 34%, var(--bg-2));
+    color-scheme: dark;
+  }
+}
+
+/* Cross-document view transitions: smooth page changes with zero JS. */
+@view-transition {
+  navigation: auto;
+}

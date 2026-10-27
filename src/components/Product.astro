@@ -1,0 +1,426 @@
+---
+const caps = [
+  { id: 'versioned', t: 'Versioned like code', d: 'Each agent’s pipeline lives in Git, with commits, branches and merges. Every change has an author and a history.' },
+  { id: 'isolated', t: 'Isolated runs', d: 'Pipelines execute in Docker Sandboxes (microVMs) that are removed afterwards. Only the outputs come back.' },
+  { id: 'record', t: 'Every run on record', d: 'Logs, exit codes and generated files are kept and tied to the exact version that produced them.' },
+  { id: 'access', t: 'Scoped access', d: 'An agent can read only the Google Drive folders it has been granted, and nothing else.' },
+  { id: 'teams', t: 'Teams stay in control', d: 'Invite-only sign-in, workspaces with roles, and administrators who can see and manage every workspace.' },
+  { id: 'health', t: 'Problems are visible', d: 'An overview shows execution health and what needs attention next, drawn from your real run history.' },
+];
+const people = ['A', 'M', 'J', 'S', 'L', 'R', 'T'];
+---
+
+<section class="section" id="product">
+  <div class="wrap">
+    <div class="head reveal">
+      <span class="label">Product</span>
+      <h2 class="h2">Everything an agent needs. Only what it was granted.</h2>
+    </div>
+
+    <div class="sel reveal" data-sel>
+      <div class="list" role="radiogroup" aria-label="Capabilities">
+        {
+          caps.map((c, i) => (
+            <>
+              <input class="sr-only" type="radio" name="cap" id={`c-${c.id}`} checked={i === 0} />
+              <label for={`c-${c.id}`}>
+                <span class="n mono">0{i + 1}</span>
+                <b>{c.t}</b>
+                <span class="d">{c.d}</span>
+              </label>
+            </>
+          ))
+        }
+      </div>
+
+      <div class="view" aria-hidden="true">
+        <!-- versioned -->
+        <div class="v v-versioned">
+          <svg viewBox="0 0 360 200" fill="none">
+            <path class="rail" d="M30 150H330" />
+            <path class="rail branch" d="M110 150C140 150 140 60 170 60H250C280 60 280 150 310 150" />
+            <circle class="nd" cx="30" cy="150" r="8" /><circle class="nd" cx="110" cy="150" r="8" />
+            <circle class="nd" cx="170" cy="60" r="8" /><circle class="nd hot" cx="210" cy="60" r="8" />
+            <circle class="nd" cx="250" cy="60" r="8" /><circle class="nd hot" cx="310" cy="150" r="8" />
+            <circle class="nd" cx="330" cy="150" r="8" />
+          </svg>
+        </div>
+        <!-- isolated -->
+        <div class="v v-isolated">
+          <svg viewBox="176 128 672 768" fill="none">
+            <g class="ring-anim" stroke-width="66" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M297 298 221 342V430" /><path d="M727 298 803 342V430" />
+              <path d="M221 594V682L297 726" /><path d="M803 594V682L727 726" />
+              <path d="M435 220 512 176 589 220" /><path d="M435 804 512 848 589 804" />
+            </g>
+            <path class="core" d="M512 400.1 608.9 456.1V568L512 623.9 415.1 568V456.1Z" stroke-width="28" stroke-linejoin="round" />
+          </svg>
+        </div>
+        <!-- record -->
+        <div class="v v-record">
+          <ul class="log mono">
+            <li><b>✓</b>pipeline resolved</li>
+            <li><b>✓</b>sandbox started</li>
+            <li><b>✓</b>outputs collected</li>
+            <li><b>◆</b>run recorded</li>
+          </ul>
+        </div>
+        <!-- access -->
+        <div class="v v-access">
+          <ul class="tree mono">
+            <li class="off">▸ Company</li>
+            <li class="on">▾ Finance <em>granted</em></li>
+            <li class="off sub">▸ Payroll</li>
+            <li class="off">▸ Legal</li>
+          </ul>
+        </div>
+        <!-- teams -->
+        <div class="v v-teams">
+          <div class="honey">{people.map((p) => <span>{p}</span>)}</div>
+        </div>
+        <!-- health -->
+        <div class="v v-health">
+          <div class="cells">
+            {Array.from({ length: 21 }, (_, i) => <i class={i === 9 ? 'warn' : ''} style={`--d:${(i * 83) % 1400}ms`}></i>)}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Gentle auto-advance until the visitor interacts. Skipped for reduced motion.
+  const root = document.querySelector<HTMLElement>('[data-sel]');
+  if (root && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const inputs = [...root.querySelectorAll<HTMLInputElement>('input[type=radio]')];
+    let on = true, vis = false, held = false;
+    const stop = () => (on = false);
+    root.addEventListener('pointerenter', () => (held = true));
+    root.addEventListener('pointerleave', () => (held = false));
+    root.addEventListener('focusin', () => (held = true));
+    root.addEventListener('focusout', () => (held = false));
+    root.addEventListener('pointerdown', stop, { once: true });
+    root.addEventListener('keydown', stop, { once: true });
+    new IntersectionObserver(([e]) => (vis = e.isIntersecting)).observe(root);
+    setInterval(() => {
+      if (!on || !vis || held) return;
+      const i = inputs.findIndex((x) => x.checked);
+      inputs[(i + 1) % inputs.length].checked = true;
+    }, 5200);
+  }
+</script>
+
+<style>
+  .head {
+    max-width: 44rem;
+  }
+  .sel {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(1.5rem, 4vw, 4rem);
+    align-items: start;
+  }
+  .list {
+    border-top: 1px solid var(--line);
+  }
+  label {
+    display: grid;
+    grid-template-columns: 2.4rem 1fr;
+    column-gap: 0.4rem;
+    padding: 1.15rem 0.25rem;
+    border-bottom: 1px solid var(--line);
+    cursor: pointer;
+    position: relative;
+  }
+  label::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: -1px;
+    height: 2px;
+    width: 100%;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s var(--ease);
+  }
+  .n {
+    grid-row: span 2;
+    font-size: 0.78rem;
+    color: var(--muted);
+    padding-top: 0.35rem;
+  }
+  b {
+    font-weight: 600;
+    font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+    letter-spacing: -0.02em;
+    color: var(--muted);
+    transition: color 0.25s;
+  }
+  .d {
+    grid-column: 2;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    color: var(--muted);
+    font-size: 0.98rem;
+    transition: max-height 0.5s var(--ease), opacity 0.4s, margin 0.4s;
+  }
+  label:hover b {
+    color: var(--ink);
+  }
+  input:checked + label b {
+    color: var(--ink);
+  }
+  input:checked + label .n {
+    color: var(--blue-text);
+  }
+  input:checked + label .d {
+    max-height: 7rem;
+    opacity: 1;
+    margin-top: 0.5rem;
+  }
+  input:checked + label::before {
+    transform: scaleX(1);
+  }
+  input:focus-visible + label {
+    outline: 2px solid var(--blue-text);
+    outline-offset: -2px;
+  }
+
+  .view {
+    position: sticky;
+    top: 6rem;
+    aspect-ratio: 1 / 0.92;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    display: grid;
+    place-items: center;
+    padding: 2.5rem;
+  }
+  .v {
+    grid-area: 1 / 1;
+    width: 100%;
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+    transition: opacity 0.45s var(--ease), transform 0.6s var(--ease);
+    pointer-events: none;
+  }
+  /* show the visual matching the checked radio */
+  .sel:has(#c-versioned:checked) .v-versioned,
+  .sel:has(#c-isolated:checked) .v-isolated,
+  .sel:has(#c-record:checked) .v-record,
+  .sel:has(#c-access:checked) .v-access,
+  .sel:has(#c-teams:checked) .v-teams,
+  .sel:has(#c-health:checked) .v-health {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* versioned */
+  .rail {
+    stroke: var(--line);
+    stroke-width: 3;
+    stroke-linecap: round;
+  }
+  .branch {
+    stroke: var(--muted);
+    stroke-dasharray: 400;
+    stroke-dashoffset: 400;
+  }
+  .nd {
+    fill: var(--bg-2);
+    stroke: var(--muted);
+    stroke-width: 3;
+  }
+  .nd.hot {
+    fill: var(--blue);
+    stroke: var(--blue);
+  }
+  .sel:has(#c-versioned:checked) .branch {
+    animation: draw 1.6s 0.15s var(--ease) forwards;
+  }
+  @keyframes draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  .v-versioned svg {
+    width: 100%;
+  }
+
+  /* isolated */
+  .v-isolated svg {
+    width: min(70%, 15rem);
+    margin-inline: auto;
+  }
+  .ring-anim {
+    stroke: var(--muted);
+    transform-origin: 512px 512px;
+  }
+  .core {
+    fill: var(--blue);
+    stroke: var(--blue);
+  }
+  .sel:has(#c-isolated:checked) .ring-anim {
+    animation: ring-close 3.2s var(--ease) infinite;
+  }
+  @keyframes ring-close {
+    0%,
+    100% {
+      transform: scale(1.28);
+      opacity: 0.45;
+    }
+    45%,
+    70% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  /* record */
+  .log {
+    display: grid;
+    gap: 0.9rem;
+    font-size: clamp(0.85rem, 1.6vw, 1.05rem);
+    color: var(--ink-2);
+  }
+  .log li {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  .log b {
+    color: var(--blue-text);
+    margin-right: 0.8rem;
+    font-weight: 500;
+  }
+  .sel:has(#c-record:checked) .log li {
+    animation: in 0.5s var(--ease) forwards;
+  }
+  .sel:has(#c-record:checked) .log li:nth-child(2) {
+    animation-delay: 0.35s;
+  }
+  .sel:has(#c-record:checked) .log li:nth-child(3) {
+    animation-delay: 0.7s;
+  }
+  .sel:has(#c-record:checked) .log li:nth-child(4) {
+    animation-delay: 1.05s;
+    color: var(--ink);
+  }
+  @keyframes in {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* access */
+  .tree {
+    display: grid;
+    gap: 0.6rem;
+    font-size: clamp(0.85rem, 1.6vw, 1.05rem);
+  }
+  .tree li {
+    padding: 0.7rem 1rem;
+    color: var(--muted);
+    border: 1px solid transparent;
+    border-radius: var(--r);
+  }
+  .tree .sub {
+    margin-left: 1.6rem;
+  }
+  .tree .on {
+    color: var(--ink);
+    background: var(--blue-soft);
+    border-color: color-mix(in srgb, var(--blue) 45%, transparent);
+    display: flex;
+    justify-content: space-between;
+  }
+  .tree em {
+    font-style: normal;
+    color: var(--blue-text);
+    font-size: 0.72em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  /* teams: a small honeycomb of hexagonal avatars */
+  .honey {
+    --s: clamp(3.6rem, 9vw, 5.2rem);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: calc(var(--s) * 3.4);
+    margin-inline: auto;
+  }
+  .honey span {
+    width: var(--s);
+    height: calc(var(--s) * 1.1547);
+    margin: calc(var(--s) * -0.14) calc(var(--s) * 0.015);
+    display: grid;
+    place-items: center;
+    font-weight: 600;
+    font-size: calc(var(--s) * 0.3);
+    background: var(--bg-3);
+    color: var(--ink);
+    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  }
+  .honey span:nth-child(5) {
+    margin-left: calc(var(--s) * 0.5);
+  }
+  .honey span:nth-child(1),
+  .honey span:nth-child(6) {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+
+  /* health: a honeycomb heat map */
+  .cells {
+    --s: clamp(2.2rem, 6vw, 3.4rem);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: calc(var(--s) * 7.2);
+    margin-inline: auto;
+  }
+  .cells i {
+    width: var(--s);
+    height: calc(var(--s) * 1.1547);
+    margin: calc(var(--s) * -0.14) calc(var(--s) * 0.015);
+    background: var(--blue);
+    opacity: 0.5;
+    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  }
+  .sel:has(#c-health:checked) .cells i {
+    animation: pulse 3.2s ease-in-out infinite;
+    animation-delay: var(--d);
+  }
+  .cells i:nth-child(7n + 1) {
+    margin-left: calc(var(--s) * 0.5);
+  }
+  .cells i.warn {
+    background: var(--red);
+    opacity: 0.95;
+  }
+  @keyframes pulse {
+    50% {
+      opacity: 0.95;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .sel {
+      grid-template-columns: 1fr;
+    }
+    .view {
+      position: relative;
+      top: 0;
+      order: -1;
+      aspect-ratio: 1 / 0.7;
+      padding: 1.5rem;
+    }
+  }
+</style>

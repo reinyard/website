@@ -1,0 +1,335 @@
+---
+const steps = [
+  { n: '01', t: 'Define', d: 'Write the pipeline and commit it. The agent now has an author, a history and a diff.' },
+  { n: '02', t: 'Run', d: 'Reinyard starts a sandbox, gives it only what it was granted, runs the pipeline and removes it.' },
+  { n: '03', t: 'Review', d: 'Logs, exit code and files are stored against the version that produced them.' },
+];
+---
+
+<section class="story" id="how">
+  <div class="pin">
+    <div class="wrap top">
+      <span class="label">How it works</span>
+      <h2 class="h2">From commit to record.</h2>
+    </div>
+
+    <div class="wrap stage" aria-hidden="true">
+      <div class="end git"><span class="mono">Commit</span><span class="hash mono">7f3a2c1</span></div>
+      <div class="end rec">
+        <span class="mono">Record</span>
+        <div class="lines"><i></i><i></i><i></i></div>
+        <span class="badge ok">succeeded</span>
+      </div>
+      <div class="track"></div>
+
+      <svg class="yard" viewBox="176 128 672 768" fill="none">
+        <g class="ring" stroke-width="66" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M297 298 221 342V430" /><path d="M727 298 803 342V430" />
+          <path d="M221 594V682L297 726" /><path d="M803 594V682L727 726" />
+          <path d="M435 220 512 176 589 220" /><path d="M435 804 512 848 589 804" />
+        </g>
+      </svg>
+
+      <div class="agent"></div>
+    </div>
+
+    <ol class="wrap caps">
+      {
+        steps.map((s) => (
+          <li>
+            <span class="mono">{s.n}</span>
+            <h3>{s.t}</h3>
+            <p>{s.d}</p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .story {
+    --s-ring: #dbe8f4;
+    --s-blue: #97ccf7;
+    background: var(--deep);
+    color: var(--on-deep);
+    view-timeline: --story block;
+  }
+  .pin {
+    min-height: 100svh;
+    padding-block: clamp(4rem, 8vw, 6rem);
+    display: grid;
+    align-content: center;
+    gap: clamp(2rem, 5vw, 3.5rem);
+  }
+  .label {
+    color: var(--on-deep-muted);
+  }
+  .h2 {
+    color: var(--on-deep);
+  }
+
+  /* ---- stage ---- */
+  .stage {
+    position: relative;
+    height: clamp(12rem, 24vw, 17rem);
+  }
+  .end {
+    position: absolute;
+    top: 50%;
+    translate: 0 -1.95rem;
+    display: grid;
+    gap: 0.6rem;
+    justify-items: center;
+    color: var(--on-deep-muted);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .git {
+    left: 0;
+  }
+  .rec {
+    right: 0;
+  }
+  .end::before {
+    content: '';
+    width: 3.4rem;
+    height: 3.9rem;
+    background: rgba(255, 255, 255, 0.14);
+    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  }
+  .hash {
+    letter-spacing: 0.04em;
+    text-transform: none;
+    color: var(--on-deep);
+    font-size: 0.78rem;
+  }
+  .badge {
+    color: var(--on-deep);
+    background: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.3);
+    text-transform: none;
+    letter-spacing: 0.02em;
+  }
+  .lines {
+    position: absolute;
+    top: 1.4rem;
+    display: grid;
+    gap: 0.28rem;
+  }
+  .lines i {
+    width: 1.3rem;
+    height: 2px;
+    background: var(--s-blue);
+    transform-origin: left;
+  }
+  .track {
+    position: absolute;
+    left: 4.2rem;
+    right: 4.2rem;
+    top: 50%;
+    height: 2px;
+    background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.34) 0 10px, transparent 10px 20px);
+  }
+  .yard {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    height: 104%;
+    translate: -50% -50%;
+    overflow: visible;
+  }
+  .ring {
+    stroke: var(--s-ring);
+    transform-origin: 512px 512px;
+  }
+  .agent {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 2.6rem;
+    height: 3rem;
+    translate: -50% -50%;
+    background: var(--s-blue);
+    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  }
+
+  /* ---- captions ---- */
+  .caps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(1rem, 3vw, 2.5rem);
+  }
+  .caps li {
+    border-top: 2px solid var(--deep-line);
+    padding-top: 1.1rem;
+  }
+  .caps .mono {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--s-blue);
+  }
+  .caps h3 {
+    margin-top: 0.4rem;
+    font-size: clamp(1.25rem, 2.2vw, 1.7rem);
+    color: var(--on-deep);
+  }
+  .caps p {
+    margin-top: 0.7rem;
+    color: var(--on-deep-muted);
+    font-size: 0.98rem;
+    max-width: 22rem;
+  }
+
+  /* ---- scroll-driven: the agent travels while the section is pinned ---- */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) and (min-width: 761px) {
+      .story {
+        height: 300vh;
+      }
+      .pin {
+        position: sticky;
+        top: 0;
+        height: 100svh;
+        padding-top: 5.5rem;
+      }
+      .agent,
+      .ring,
+      .caps li,
+      .lines i {
+        animation-timeline: --story;
+        animation-range: cover 25% cover 75%;
+        animation-fill-mode: both;
+        animation-timing-function: linear;
+      }
+      .agent {
+        animation-name: travel;
+      }
+      .ring {
+        animation-name: story-close;
+      }
+      .caps li:nth-child(1) {
+        animation-name: on1;
+      }
+      .caps li:nth-child(2) {
+        animation-name: on2;
+      }
+      .caps li:nth-child(3) {
+        animation-name: on3;
+      }
+      .lines i {
+        animation-name: write;
+      }
+      .badge {
+        animation: stamp linear both;
+        animation-timeline: --story;
+        animation-range: cover 66% cover 75%;
+      }
+      .lines i:nth-child(2) {
+        animation-range: cover 66% cover 75%;
+      }
+      .lines i:nth-child(3) {
+        animation-range: cover 68% cover 75%;
+      }
+    }
+  }
+  @keyframes travel {
+    0%,
+    10% {
+      left: 3.1rem;
+      scale: 1;
+    }
+    38%,
+    62% {
+      left: 50%;
+      scale: 0.82;
+    }
+    88% {
+      left: calc(100% - 3.1rem);
+      scale: 1;
+      opacity: 1;
+    }
+    100% {
+      left: calc(100% - 3.1rem);
+      scale: 0.25;
+      opacity: 0;
+    }
+  }
+  @keyframes story-close {
+    0%,
+    14% {
+      transform: scale(1.55);
+      opacity: 0.25;
+    }
+    38%,
+    62% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    84%,
+    100% {
+      transform: scale(1.55);
+      opacity: 0.25;
+    }
+  }
+  @keyframes on1 {
+    0%,
+    26% {
+      opacity: 1;
+    }
+    36%,
+    100% {
+      opacity: 0.75;
+    }
+  }
+  @keyframes on2 {
+    0%,
+    26% {
+      opacity: 0.75;
+    }
+    38%,
+    60% {
+      opacity: 1;
+    }
+    70%,
+    100% {
+      opacity: 0.75;
+    }
+  }
+  @keyframes on3 {
+    0%,
+    62% {
+      opacity: 0.75;
+    }
+    76%,
+    100% {
+      opacity: 1;
+    }
+  }
+  @keyframes stamp {
+    from {
+      opacity: 0;
+      translate: 0 6px;
+    }
+  }
+  @keyframes write {
+    0%,
+    80% {
+      transform: scaleX(0);
+    }
+    100% {
+      transform: scaleX(1);
+    }
+  }
+
+  @media (max-width: 760px) {
+    .caps {
+      grid-template-columns: 1fr;
+      gap: 0.9rem;
+    }
+    .stage {
+      height: 11rem;
+    }
+  }
+</style>

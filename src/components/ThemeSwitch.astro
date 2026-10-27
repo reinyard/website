@@ -1,0 +1,91 @@
+---
+// System / Light / Dark, like the app's Appearance setting. One control for the whole site,
+// including the docs header and the docs mobile drawer. Uses Starlight's storage key and
+// <html data-theme> so a choice made anywhere applies everywhere.
+---
+<div class="theme-switch" role="group" aria-label="Color theme">
+  <button type="button" data-theme-set="system" aria-pressed="false" aria-label="Match system" title="System">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="12" rx="2" /><path d="M9 20h6M12 16.5V20" /></svg>
+  </button>
+  <button type="button" data-theme-set="light" aria-pressed="false" aria-label="Light" title="Light">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3.8" /><path d="M12 3.2v2.4M12 18.4v2.4M3.2 12h2.4M18.4 12h2.4M5.8 5.8l1.7 1.7M16.5 16.5l1.7 1.7M5.8 18.2l1.7-1.7M16.5 7.5l1.7-1.7" /></svg>
+  </button>
+  <button type="button" data-theme-set="dark" aria-pressed="false" aria-label="Dark" title="Dark">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13.4A8 8 0 1 1 10.6 4a6.4 6.4 0 0 0 9.4 9.4Z" /></svg>
+  </button>
+</div>
+
+<script>
+  const KEY = 'starlight-theme';
+  const light = matchMedia('(prefers-color-scheme: light)');
+  const read = (): 'system' | 'light' | 'dark' => {
+    try {
+      const v = localStorage.getItem(KEY);
+      return v === 'light' || v === 'dark' ? v : 'system';
+    } catch {
+      return 'system';
+    }
+  };
+  const apply = (mode: string) => {
+    document.documentElement.dataset.theme = mode === 'system' ? (light.matches ? 'light' : 'dark') : mode;
+  };
+  const paint = () => {
+    const now = read();
+    document.querySelectorAll<HTMLElement>('[data-theme-set]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.themeSet === now)));
+  };
+  document.addEventListener('click', (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLElement>('[data-theme-set]');
+    if (!b) return;
+    const mode = b.dataset.themeSet!;
+    try {
+      mode === 'system' ? localStorage.removeItem(KEY) : localStorage.setItem(KEY, mode);
+    } catch {}
+    apply(mode);
+    paint();
+  });
+  light.addEventListener('change', () => read() === 'system' && apply('system'));
+  addEventListener('storage', (e) => {
+    if (e.key === KEY) {
+      apply(read());
+      paint();
+    }
+  });
+  paint();
+</script>
+
+<style>
+  .theme-switch {
+    display: inline-flex;
+    align-self: center;
+    height: fit-content;
+    gap: 2px;
+    padding: 2px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+  }
+  button {
+    display: grid;
+    place-items: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    padding: 0;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+  button:hover {
+    color: var(--ink);
+  }
+  button[aria-pressed='true'] {
+    background: var(--bg-3);
+    color: var(--ink);
+  }
+  svg {
+    width: 1rem;
+    height: 1rem;
+  }
+</style>

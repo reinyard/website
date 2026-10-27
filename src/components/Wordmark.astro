@@ -1,0 +1,20 @@
+---
+import Mark from './Mark.astro';
+interface Props { size?: number }
+const { size = 34 } = Astro.props;
+---
+<a class="brand" href="/" aria-label="reinyard home">
+  <Mark size={size} /><span>reinyard.</span>
+</a>
+<style>
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    font-weight: 600;
+    font-size: 1.28rem;
+    letter-spacing: -0.04em;
+    color: var(--ink);
+    text-decoration: none;
+  }
+</style>

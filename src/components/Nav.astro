@@ -1,0 +1,233 @@
+---
+import Wordmark from './Wordmark.astro';
+import ThemeSwitch from './ThemeSwitch.astro';
+import GithubIcon from './GithubIcon.astro';
+const links = [
+  { href: '/#product', label: 'Product' },
+  { href: '/docs/', label: 'Docs' },
+  { href: '/#pricing', label: 'Pricing' },
+  { href: '/about/', label: 'About' },
+];
+---
+
+<header class="nav">
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="wrap bar">
+    <Wordmark />
+
+    <nav class="links" aria-label="Primary">
+      {links.map((l) => <a href={l.href}>{l.label}</a>)}
+    </nav>
+
+    <div class="actions">
+      <a class="gh" href="https://github.com/reinyard" rel="noopener" aria-label="Reinyard on GitHub" title="GitHub"><GithubIcon /></a>
+      <ThemeSwitch />
+      <button class="login" type="button" disabled aria-disabled="true" title="The managed cloud is coming soon">
+        <span>Log in</span><em>Soon</em>
+      </button>
+
+      <details class="menu">
+        <summary aria-label="Menu"><span></span><span></span></summary>
+        <div class="sheet">
+          {links.map((l) => <a href={l.href}>{l.label}</a>)}
+          <a class="gh-row" href="https://github.com/reinyard" rel="noopener"><GithubIcon size={18} />GitHub</a>
+          <div class="login-m" aria-disabled="true">Log in / Sign up <em>Coming soon</em></div>
+        </div>
+      </details>
+    </div>
+  </div>
+</header>
+
+<script>
+  // The mobile menu is a <details>: close it after choosing a link (same-page anchors do not reload) and on Escape.
+  const menu = document.querySelector<HTMLDetailsElement>('.nav .menu');
+  if (menu) {
+    menu.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('.sheet a')) menu.open = false;
+    });
+    addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && menu.open) {
+        menu.open = false;
+        menu.querySelector('summary')?.focus();
+      }
+    });
+  }
+</script>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+  }
+  .skip {
+    position: absolute;
+    left: 1rem;
+    top: -4rem;
+    background: var(--accent);
+    color: var(--on-accent);
+    padding: 0.5rem 0.9rem;
+    border-radius: var(--r);
+    z-index: 100;
+  }
+  .skip:focus {
+    top: 0.75rem;
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    height: 4.25rem;
+    gap: 2rem;
+  }
+  .links {
+    display: flex;
+    gap: 0.1rem;
+  }
+  .links a {
+    padding: 0.5rem 0.85rem;
+    color: var(--muted);
+    font-size: 0.92rem;
+    font-weight: 500;
+    position: relative;
+    transition: color 0.2s;
+  }
+  .links a::after {
+    content: '';
+    position: absolute;
+    left: 0.85rem;
+    right: 0.85rem;
+    bottom: 0.25rem;
+    height: 2px;
+    background: var(--blue-text);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s var(--ease);
+  }
+  .links a:hover {
+    color: var(--ink);
+  }
+  .links a:hover::after {
+    transform: scaleX(1);
+  }
+  .actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .gh {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--r);
+    color: var(--muted);
+    transition: color 0.2s, background 0.2s;
+  }
+  .gh:hover {
+    color: var(--ink);
+    background: var(--bg-3);
+  }
+  .sheet .gh-row {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+  .login {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    height: 2.5rem;
+    padding: 0 0.5rem 0 1rem;
+    margin-left: 0.3rem;
+    border-radius: var(--r);
+    border: 1px dashed var(--line);
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: not-allowed;
+  }
+  .login em,
+  .login-m em {
+    font-style: normal;
+    font-family: var(--mono);
+    font-size: 0.64rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--blue-text);
+    background: var(--blue-soft);
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+  }
+
+  .menu {
+    display: none;
+  }
+  .menu summary {
+    list-style: none;
+    display: grid;
+    place-content: center;
+    gap: 6px;
+    width: 2.6rem;
+    height: 2.6rem;
+    border: 1px solid var(--line);
+    border-radius: var(--r);
+    background: var(--bg-2);
+    cursor: pointer;
+  }
+  .menu summary::-webkit-details-marker {
+    display: none;
+  }
+  .menu summary span {
+    width: 16px;
+    height: 2px;
+    background: var(--ink);
+    transition: transform 0.25s var(--ease);
+  }
+  .menu[open] summary span:first-child {
+    transform: translateY(4px) rotate(45deg);
+  }
+  .menu[open] summary span:last-child {
+    transform: translateY(-4px) rotate(-45deg);
+  }
+  .sheet {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    padding: 0.5rem var(--gutter) 1.25rem;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    display: grid;
+  }
+  .sheet a,
+  .login-m {
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  .login-m {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    color: var(--muted);
+    border-bottom: 0;
+  }
+
+  @media (max-width: 860px) {
+    .links,
+    .login,
+    .gh {
+      display: none;
+    }
+    .menu {
+      display: block;
+    }
+  }
+</style>

@@ -1,0 +1,92 @@
+---
+import Wordmark from './Wordmark.astro';
+---
+
+<footer class="foot">
+  <div class="wrap grid">
+    <div class="about">
+      <Wordmark />
+      <p>A controlled place for agents to work.</p>
+    </div>
+    <nav aria-label="Product">
+      <h2>Product</h2>
+      <a href="/#product">Features</a>
+      <a href="/#pricing">Pricing</a>
+      <a href="/docs/">Documentation</a>
+    </nav>
+    <nav aria-label="Company">
+      <h2>Company</h2>
+      <a href="/about/">About</a>
+      <a href="https://github.com/reinyard" rel="noopener">GitHub</a>
+      <a href="mailto:contact@reinyard.com">Contact</a>
+    </nav>
+    <nav aria-label="Security">
+      <h2>Security</h2>
+      <a href="/docs/security/">Security model</a>
+      <a href="mailto:security@reinyard.com">Report a vulnerability</a>
+      <a href="/licenses/">Licenses</a>
+    </nav>
+  </div>
+  <div class="wrap legal">
+    <span>© 2026 Reinyard</span>
+    <span class="mono">reinyard.com</span>
+  </div>
+</footer>
+
+<style>
+  .foot {
+    background: var(--bg);
+    border-top: 1px solid var(--line);
+    padding-top: clamp(3rem, 6vw, 4.5rem);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1.6fr repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+  .about p {
+    color: var(--muted);
+    margin-top: 1rem;
+    max-width: 17rem;
+  }
+  nav {
+    display: grid;
+    align-content: start;
+    gap: 0.7rem;
+  }
+  h2 {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+    margin-bottom: 0.4rem;
+  }
+  nav a {
+    width: fit-content;
+    color: var(--ink-2);
+    font-size: 0.97rem;
+    transition: color 0.2s;
+  }
+  nav a:hover {
+    color: var(--blue-text);
+  }
+  .legal {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 3.5rem;
+    padding-block: 1.5rem;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  @media (max-width: 720px) {
+    .grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .about {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

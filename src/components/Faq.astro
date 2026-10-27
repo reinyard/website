@@ -1,0 +1,128 @@
+---
+const items = [
+  { q: 'How are runs isolated?', a: 'Every run executes in its own Docker Sandbox, a microVM created for that run. When it finishes, the sandbox is removed and only the outputs come back.' },
+  { q: 'What can an agent access?', a: 'Only what it has been granted. Access to Google Drive is per agent and per folder, read-only. Anything outside the granted folders is out of range.' },
+  { q: 'Where does my data live?', a: 'Reinyard is self-hosted, so it runs on infrastructure you control, with SQLite or Postgres as the database.' },
+  { q: 'Who can sign in, and who sees what?', a: 'Sign-in is invite-only. Work is organized in workspaces with roles. Administrators can see and manage every workspace, so choose them carefully.' },
+  { q: 'Can I change an agent without losing track of it?', a: 'Changes are versioned, so they are easy to review and undo. A pipeline lives in Git with branches and merges, commits never change, and every run is tied to the exact commit that produced it. Editing saves a new commit.' },
+  { q: 'Is there a managed cloud?', a: 'It is planned, not available yet. Pricing will be announced at launch. Write to contact@reinyard.com to hear when it opens.' },
+  { q: 'How do I get it?', a: 'Installation instructions will be published with the first release. Until then, the documentation describes how the platform fits together.' },
+  { q: 'Is it ready to host for other companies?', a: 'Not yet. Reinyard is under active development and is not ready for public multi-tenant hosting. Run it for your own organization.' },
+];
+---
+
+<section class="section" id="faq">
+  <div class="wrap split">
+    <div class="reveal head">
+      <span class="label">FAQ</span>
+      <h2 class="h2">Questions we expect.</h2>
+      <p class="lead">Short, plain answers. The documentation goes deeper.</p>
+      <a class="btn" href="/docs/">
+        Read the docs
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
+      </a>
+    </div>
+
+    <div class="list reveal">
+      {
+        items.map((it, i) => (
+          <details name="faq" open={i === 0}>
+            <summary><span>{it.q}</span><i aria-hidden="true"></i></summary>
+            <p>{it.a}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .split {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: clamp(2rem, 6vw, 5rem);
+    align-items: start;
+  }
+  .head .btn {
+    margin-top: 1.8rem;
+  }
+  .head {
+    position: sticky;
+    top: 6.5rem;
+  }
+  .list {
+    border-top: 1px solid var(--line);
+  }
+  details {
+    border-bottom: 1px solid var(--line);
+  }
+  summary {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 0.2rem;
+    cursor: pointer;
+    font-size: 1.06rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    transition: color 0.2s;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary:hover {
+    color: var(--blue-text);
+  }
+  summary i {
+    flex: none;
+    position: relative;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--bg-2);
+  }
+  summary i::before,
+  summary i::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 0.6rem;
+    height: 1.5px;
+    background: var(--ink);
+    translate: -50% -50%;
+    transition: transform 0.3s var(--ease);
+  }
+  summary i::after {
+    transform: rotate(90deg);
+  }
+  details[open] summary i::after {
+    transform: rotate(0deg);
+  }
+  details[open] summary {
+    color: var(--ink);
+  }
+  details p {
+    padding: 0 2.6rem 1.4rem 0.2rem;
+    color: var(--muted);
+    max-width: 38rem;
+    animation: open 0.4s var(--ease);
+  }
+  @keyframes open {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+  @media (max-width: 860px) {
+    .split {
+      grid-template-columns: 1fr;
+    }
+    .head {
+      position: static;
+    }
+  }
+</style>
