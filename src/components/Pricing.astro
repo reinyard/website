@@ -254,8 +254,8 @@ const rows = [
     font-size: 0.92rem;
   }
 
-  /* tablets and small laptops: the cards sit side by side above a compact table (the four-column grid is too tight here) */
-  @media (max-width: 1040px) {
+  /* tablets and small laptops: the cards sit side by side above a compact table (the four-column grid is too tight below about 1140px) */
+  @media (max-width: 1140px) {
     .plans {
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 0.8rem;
@@ -316,7 +316,8 @@ const rows = [
       grid-template-columns: 1fr;
     }
   }
-  @media (min-width: 861px) and (max-width: 980px) {
+  /* where a card is narrow, every plan puts its badge under the name so the three headers line up */
+  @media (min-width: 1141px), (min-width: 861px) and (max-width: 980px) {
     .r {
       flex-direction: column;
       align-items: flex-start;

@@ -128,10 +128,13 @@ import GithubIcon from './GithubIcon.astro';
   .sub {
     margin-top: 1.8rem;
     max-width: 33rem;
-    /* a touch stronger than --muted: this text sits on the moving hexagon field, so its worst case is a pattern line */
-    color: color-mix(in srgb, var(--muted) 78%, var(--ink));
+    color: var(--muted);
     font-size: clamp(1.05rem, 1.7vw, 1.28rem);
     animation: slide 0.7s 0.12s var(--ease) both;
+  }
+  /* light theme only: a touch stronger than --muted, because this text sits on the moving hexagon field and its worst case is a pattern line */
+  :global(:root[data-theme='light']) .sub {
+    color: color-mix(in srgb, var(--muted) 78%, var(--ink));
   }
   .cta {
     margin-top: 2.1rem;
