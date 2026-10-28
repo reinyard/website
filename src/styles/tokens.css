@@ -17,6 +17,7 @@
   --blue-text: #18578b;
   --focus: #18578b;
   --red: #c64739; /* failed runs only */
+  --red-text: #b73a2d; /* the same red as text, 4.5:1 on its tinted badge */
   --ring: #45577a; /* logo brackets */
   --core: #0a9ad0; /* logo center */
   --cell: rgba(61, 103, 138, 0.2); /* hex field outlines */
@@ -54,6 +55,7 @@
   --blue-text: #97ccf7;
   --focus: #97ccf7;
   --red: #d37369;
+  --red-text: #f2aaa2;
   --ring: #9aa9c7;
   --core: #5cc2f2;
   --cell: rgba(189, 197, 204, 0.16);
@@ -82,6 +84,7 @@
     --tint: var(--blue);
     --focus: #97ccf7;
     --red: #d37369;
+    --red-text: #f2aaa2;
     --ring: #9aa9c7;
     --core: #5cc2f2;
     --cell: rgba(189, 197, 204, 0.16);
