@@ -128,7 +128,8 @@ import GithubIcon from './GithubIcon.astro';
   .sub {
     margin-top: 1.8rem;
     max-width: 33rem;
-    color: var(--muted);
+    /* a touch stronger than --muted: this text sits on the moving hexagon field, so its worst case is a pattern line */
+    color: color-mix(in srgb, var(--muted) 78%, var(--ink));
     font-size: clamp(1.05rem, 1.7vw, 1.28rem);
     animation: slide 0.7s 0.12s var(--ease) both;
   }

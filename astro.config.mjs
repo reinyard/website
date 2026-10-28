@@ -11,6 +11,10 @@ export default defineConfig({
       title: 'Reinyard',
       description: 'Documentation for Reinyard: build, version and run agents in isolated sandboxes.',
       favicon: '/icon.svg',
+      head: [
+        { tag: 'link', attrs: { rel: 'icon', href: '/favicon.ico', sizes: '32x32' } },
+        { tag: 'link', attrs: { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' } },
+      ],
       customCss: ['./src/styles/fonts.css', './src/styles/starlight.css'],
       components: {
         Header: './src/components/DocsHeader.astro',
