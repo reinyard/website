@@ -1,10 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
 import Hero from '../components/Hero.astro';
+import Strip from '../components/Strip.astro';
 import Statement from '../components/Statement.astro';
 import Product from '../components/Product.astro';
 import Story from '../components/Story.astro';
-import Deploy from '../components/Deploy.astro';
 import Pricing from '../components/Pricing.astro';
 import Faq from '../components/Faq.astro';
 import CtaBand from '../components/CtaBand.astro';
@@ -12,14 +12,15 @@ import CtaBand from '../components/CtaBand.astro';
 
 <Base
   title="Reinyard: a controlled place for agents to work"
-  description="Build, version and run agents and automations in isolated sandboxes. Every change lives in Git and every run is on record. Self-hosted, managed cloud coming soon."
+  description="Build, version and run agents and automations in isolated sandboxes. Every change lives in Git and every run is on record. Run it on-premises, in the cloud or both. Managed cloud coming soon."
   path="/"
+  overlay
 >
   <Hero />
+  <Strip />
   <Statement />
   <Product />
   <Story />
-  <Deploy />
   <Pricing />
   <Faq />
   <CtaBand />

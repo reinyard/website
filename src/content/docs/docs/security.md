@@ -7,8 +7,8 @@ This page states the design plainly, including what is not yet covered.
 
 ## What the design provides
 
-- **Isolation.** Every run executes in its own Docker Sandbox (microVM), removed afterwards. Only outputs come back.
-- **Scoped access.** Agents read only the Google Drive folders they have been granted.
+- **Isolation.** Every run executes in its own sandbox: a Docker Sandbox (microVM) on-premises, a Google sandbox in the cloud. On-premises, the sandbox is removed afterwards and only outputs come back.
+- **Scoped access.** Agents read only the folders they have been granted.
 - **Invite-only sign-in.** Accounts exist only for people who were invited.
 - **Attribution.** Every run is recorded against the exact version of the pipeline that produced it.
 

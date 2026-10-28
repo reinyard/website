@@ -10,10 +10,14 @@ html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
 }
-/* Sections reached from the nav land just under it (the nav is 4.25rem tall). */
+/* Sections reached from the nav land just under the floating pill (about 4.9rem). */
 :target,
 section[id] {
-  scroll-margin-top: 4.25rem;
+  scroll-margin-top: 4.9rem;
+}
+/* The header floats, so pages without a full-bleed first section leave room for it. */
+main.pad {
+  padding-top: 4.9rem;
 }
 body {
   margin: 0;

@@ -1,0 +1,69 @@
+---
+// A list of runs: which agent, which commit, how it ended.
+interface Row { agent: string; hash: string; state: 'succeeded' | 'failed' | 'running' | 'queued'; note?: string }
+interface Props { rows: Row[]; }
+const { rows } = Astro.props;
+---
+<ul class="ex">
+  {
+    rows.map((r) => (
+      <li>
+        <b>{r.agent}</b>
+        <span class="h mono">{r.hash}</span>
+        {r.note && <span class="note">{r.note}</span>}
+        <span class:list={['st', 'mono', r.state]}>{r.state}</span>
+      </li>
+    ))
+  }
+</ul>
+<style>
+  .ex {
+    display: grid;
+  }
+  li {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 0.7rem;
+    align-items: center;
+    padding: 0.5rem 0.1rem;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.95em;
+  }
+  li:last-child {
+    border-bottom: 0;
+  }
+  .note {
+    grid-column: 1 / 3;
+    grid-row: 2;
+    color: var(--muted);
+    font-size: 0.85em;
+    margin-top: -0.2rem;
+  }
+  b {
+    font-weight: 600;
+  }
+  .h {
+    color: var(--muted);
+    font-size: 0.8em;
+  }
+  .st {
+    font-size: 0.74em;
+    letter-spacing: 0.03em;
+    padding: 0.12rem 0.5rem;
+    border-radius: 5px;
+    color: var(--blue-text);
+    background: var(--a-1);
+    border: 1px solid var(--a-3);
+  }
+  .st.failed {
+    color: var(--red);
+    background: color-mix(in srgb, var(--red) 11%, var(--bg-2));
+    border-color: color-mix(in srgb, var(--red) 38%, transparent);
+  }
+  .st.running,
+  .st.queued {
+    color: var(--muted);
+    background: transparent;
+    border-color: var(--line);
+  }
+</style>

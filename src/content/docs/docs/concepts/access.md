@@ -5,9 +5,9 @@ description: How an agent is limited to the data it needs.
 
 An agent starts with no access. It can read only what has been explicitly granted to it.
 
-## Google Drive
+## Folders
 
-Access to Google Drive is granted **per folder**. An agent can read the folders it has been given and nothing else. Granting one folder does not expose its siblings or its parents.
+Access is granted **per folder**. An agent can read the folders it has been given and nothing else. Granting one folder does not expose its siblings or its parents.
 
 ## Principles
 

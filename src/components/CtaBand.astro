@@ -1,49 +1,114 @@
 ---
-import Mark from './Mark.astro';
+// the closing line sits in the brand blue, and its brackets close around it as it scrolls into view,
+// the same gesture as the hero's "rein."
+import GithubIcon from './GithubIcon.astro';
+const cells = Array.from({ length: 9 });
 ---
 
-<section class="cta">
+<section class="cta" data-live>
+  <div class="field" aria-hidden="true">
+    {cells.map((_, i) => <i style={`--i:${i}`}></i>)}
+  </div>
   <div class="wrap inner">
-    <h2>Put your agents<br />on a rein.</h2>
+    <p class="kick mono">Define · Isolate · Record</p>
+    <h2 class="brk">
+      <span>Put your agents</span>
+      <span>on a rein.</span>
+    </h2>
     <div class="row">
       <a class="btn primary" href="/docs/">
         Read the docs
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
       </a>
+      <a class="btn" href="https://github.com/reinyard" rel="noopener"><GithubIcon size={17} />GitHub</a>
       <a class="btn" href="mailto:contact@reinyard.com">Contact us</a>
     </div>
-    <div class="big" aria-hidden="true"><Mark size={360} tile={false} /></div>
   </div>
 </section>
 
 <style>
   .cta {
     --ring: #dbe8f4;
-    --core: #97ccf7;
+    position: relative;
     background: var(--deep);
     color: var(--on-deep);
     overflow: clip;
+    isolation: isolate;
+  }
+  /* a loose hexagon field behind the headline: the yard */
+  .field {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    align-items: center;
+    opacity: 0.55;
+    mask-image: linear-gradient(90deg, transparent 35%, #000 100%);
+  }
+  .field i {
+    justify-self: center;
+    width: clamp(2.4rem, 7vw, 5.4rem);
+    aspect-ratio: 0.866;
+    background: rgba(255, 255, 255, 0.08);
+    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+    translate: 0 calc((var(--i) - 4) * 1.4rem * (var(--i) - 4) / 4);
+  }
+  .field i:nth-child(odd) {
+    translate: 0 -30%;
+  }
+  .field i:nth-child(even) {
+    translate: 0 30%;
+  }
+  .cta.is-live .field i {
+    animation: cta-pulse 5s calc(var(--i) * 0.4s) ease-in-out infinite;
+  }
+  @keyframes cta-pulse {
+    50% {
+      background: rgba(255, 255, 255, 0.2);
+    }
   }
   .inner {
-    position: relative;
-    padding-block: clamp(4.5rem, 10vw, 8rem);
+    padding-block: clamp(5rem, 11vw, 9rem);
     display: grid;
-    gap: 2.2rem;
+    gap: 2rem;
     justify-items: start;
   }
+  .kick {
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--on-deep-muted);
+  }
   h2 {
-    font-size: clamp(2.1rem, 5.6vw, 4.2rem);
-    letter-spacing: -0.045em;
-    line-height: 1.04;
-    position: relative;
-    z-index: 1;
+    --bl: 0.22em;
+    --bw: 0.045em;
+    --bc: #ffffff;
+    font-size: clamp(2.6rem, 8vw, 6.4rem);
+    letter-spacing: -0.05em;
+    line-height: 1;
+    font-weight: 600;
+    padding: 0.18em 0.3em 0.22em 0.26em;
+    margin-left: -0.26em;
+  }
+  h2 span {
+    display: block;
+  }
+  h2::before {
+    inset: -0.4em;
+    opacity: 0;
+    transition:
+      inset 1.1s var(--ease),
+      opacity 0.8s;
+  }
+  .cta.is-live h2::before {
+    inset: 0;
+    opacity: 1;
   }
   .row {
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
-    position: relative;
-    z-index: 1;
   }
   .cta :global(.btn.primary) {
     background: #ffffff;
@@ -58,17 +123,9 @@ import Mark from './Mark.astro';
   .cta :global(.btn:not(.primary):hover) {
     background: rgba(255, 255, 255, 0.12);
   }
-  .big {
-    position: absolute;
-    right: -2rem;
-    top: 50%;
-    translate: 0 -50%;
-    opacity: 0.2;
-  }
-  @media (max-width: 760px) {
-    .big {
-      opacity: 0.1;
-      right: -6rem;
+  @media (max-width: 720px) {
+    .field {
+      opacity: 0.35;
     }
   }
 </style>

@@ -1,335 +1,193 @@
 ---
-const steps = [
-  { n: '01', t: 'Define', d: 'Write the pipeline and commit it. The agent now has an author, a history and a diff.' },
-  { n: '02', t: 'Run', d: 'Reinyard starts a sandbox, gives it only what it was granted, runs the pipeline and removes it.' },
-  { n: '03', t: 'Review', d: 'Logs, exit code and files are stored against the version that produced them.' },
+// the same three questions asked of an agent that runs loose and of one that runs in Reinyard.
+// Left, the answers are guesses. Right, they resolve one by one into something you can point at.
+const rows = [
+  { q: 'Which version ran?', loose: 'Whatever was on the machine at the time', yes: 'Commit 7f3a2c1, unchanged since' },
+  { q: 'What could it reach?', loose: 'Anything the account could', yes: 'The Finance folder, read-only' },
+  { q: 'What did it do?', loose: 'Scattered logs, if they were kept', yes: 'A run record: logs, exit code, files' },
 ];
 ---
 
-<section class="story" id="how">
-  <div class="pin">
-    <div class="wrap top">
+<section id="how" class="story" data-live>
+  <div class="wrap">
+    <header class="head">
       <span class="label">How it works</span>
-      <h2 class="h2">From commit to record.</h2>
-    </div>
+      <h2 class="h2">The same agent, with and without a rein.</h2>
+      <p class="lead">Ask three questions about a run. Without Reinyard they are guesses; with it, each one has an answer you can open.</p>
+    </header>
 
-    <div class="wrap stage" aria-hidden="true">
-      <div class="end git"><span class="mono">Commit</span><span class="hash mono">7f3a2c1</span></div>
-      <div class="end rec">
-        <span class="mono">Record</span>
-        <div class="lines"><i></i><i></i><i></i></div>
-        <span class="badge ok">succeeded</span>
+    <div class="cols">
+      <div class="col loose">
+        <p class="tag mono"><i></i>Without Reinyard</p>
+        <ul>
+          {rows.map((r) => <li><span class="q">{r.q}</span><b>{r.loose}</b><em class="mono" aria-hidden="true">?</em></li>)}
+        </ul>
       </div>
-      <div class="track"></div>
-
-      <svg class="yard" viewBox="176 128 672 768" fill="none">
-        <g class="ring" stroke-width="66" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M297 298 221 342V430" /><path d="M727 298 803 342V430" />
-          <path d="M221 594V682L297 726" /><path d="M803 594V682L727 726" />
-          <path d="M435 220 512 176 589 220" /><path d="M435 804 512 848 589 804" />
-        </g>
-      </svg>
-
-      <div class="agent"></div>
+      <div class="col held brk">
+        <p class="tag mono"><i></i>With Reinyard</p>
+        <ul>
+          {
+            rows.map((r, n) => (
+              <li style={`--n:${n}`}>
+                <span class="q">{r.q}</span>
+                <b>{r.yes}</b>
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" /></svg>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="steps mono"><span>Define</span><i></i><span>Isolate</span><i></i><span>Record</span></p>
+      </div>
     </div>
-
-    <ol class="wrap caps">
-      {
-        steps.map((s) => (
-          <li>
-            <span class="mono">{s.n}</span>
-            <h3>{s.t}</h3>
-            <p>{s.d}</p>
-          </li>
-        ))
-      }
-    </ol>
   </div>
 </section>
 
 <style>
   .story {
-    --s-ring: #dbe8f4;
-    --s-blue: #97ccf7;
-    background: var(--deep);
-    color: var(--on-deep);
-    view-timeline: --story block;
+    padding-block: clamp(4rem, 8vw, 7rem);
   }
-  .pin {
-    min-height: 100svh;
-    padding-block: clamp(4rem, 8vw, 6rem);
+  .head {
     display: grid;
-    align-content: center;
-    gap: clamp(2rem, 5vw, 3.5rem);
+    gap: 0.9rem;
+    max-width: 46rem;
   }
-  .label {
-    color: var(--on-deep-muted);
-  }
-  .h2 {
-    color: var(--on-deep);
-  }
-
-  /* ---- stage ---- */
-  .stage {
-    position: relative;
-    height: clamp(12rem, 24vw, 17rem);
-  }
-  .end {
-    position: absolute;
-    top: 50%;
-    translate: 0 -1.95rem;
+  .cols {
+    margin-top: clamp(2.4rem, 5vw, 3.8rem);
     display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1rem, 3vw, 2.4rem);
+  }
+  .col {
+    padding: clamp(1.3rem, 3vw, 2.2rem);
+    border-radius: var(--r-lg);
+    display: grid;
+    gap: 1.2rem;
+    align-content: start;
+  }
+  .loose {
+    border: 1px dashed var(--line);
+    color: var(--muted);
+  }
+  .held {
+    --bl: 18px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+  }
+  .tag {
+    display: flex;
     gap: 0.6rem;
-    justify-items: center;
-    color: var(--on-deep-muted);
-    font-size: 0.75rem;
+    align-items: center;
+    font-size: 0.74rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
   }
-  .git {
-    left: 0;
-  }
-  .rec {
-    right: 0;
-  }
-  .end::before {
-    content: '';
-    width: 3.4rem;
-    height: 3.9rem;
-    background: rgba(255, 255, 255, 0.14);
+  .tag i {
+    width: 0.55rem;
+    height: 0.62rem;
     clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+    background: var(--muted);
+    opacity: 0.6;
   }
-  .hash {
-    letter-spacing: 0.04em;
-    text-transform: none;
-    color: var(--on-deep);
-    font-size: 0.78rem;
+  .held .tag {
+    color: var(--blue-text);
   }
-  .badge {
-    color: var(--on-deep);
-    background: rgba(255, 255, 255, 0.14);
-    border-color: rgba(255, 255, 255, 0.3);
-    text-transform: none;
-    letter-spacing: 0.02em;
+  .held .tag i {
+    background: var(--blue);
+    opacity: 1;
   }
-  .lines {
-    position: absolute;
-    top: 1.4rem;
+  ul {
     display: grid;
-    gap: 0.28rem;
   }
-  .lines i {
-    width: 1.3rem;
-    height: 2px;
-    background: var(--s-blue);
-    transform-origin: left;
-  }
-  .track {
-    position: absolute;
-    left: 4.2rem;
-    right: 4.2rem;
-    top: 50%;
-    height: 2px;
-    background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.34) 0 10px, transparent 10px 20px);
-  }
-  .yard {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    height: 104%;
-    translate: -50% -50%;
-    overflow: visible;
-  }
-  .ring {
-    stroke: var(--s-ring);
-    transform-origin: 512px 512px;
-  }
-  .agent {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 2.6rem;
-    height: 3rem;
-    translate: -50% -50%;
-    background: var(--s-blue);
-    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
-  }
-
-  /* ---- captions ---- */
-  .caps {
+  li {
+    position: relative;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: clamp(1rem, 3vw, 2.5rem);
+    grid-template-columns: 1fr auto;
+    gap: 0.2rem 1rem;
+    align-items: center;
+    padding: 1.05rem 0;
+    border-top: 1px solid var(--line);
   }
-  .caps li {
-    border-top: 2px solid var(--deep-line);
-    padding-top: 1.1rem;
+  .q {
+    grid-column: 1 / -1;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
   }
-  .caps .mono {
-    font-size: 0.75rem;
+  li b {
+    font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+    letter-spacing: -0.02em;
+    font-weight: 500;
+  }
+  .loose b {
+    font-style: italic;
+    opacity: 0.75;
+  }
+  .loose em {
+    font-style: normal;
+    font-size: 1.5rem;
+    color: var(--muted);
+    opacity: 0.6;
+  }
+  .held b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .held svg {
+    width: 1.4rem;
+    height: 1.4rem;
+    fill: none;
+    stroke: var(--blue);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 16;
+  }
+  .steps {
+    display: flex;
+    gap: 0.7rem;
+    align-items: center;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.72rem;
     letter-spacing: 0.1em;
-    color: var(--s-blue);
+    text-transform: uppercase;
+    color: var(--muted);
   }
-  .caps h3 {
-    margin-top: 0.4rem;
-    font-size: clamp(1.25rem, 2.2vw, 1.7rem);
-    color: var(--on-deep);
+  .steps i {
+    flex: 1;
+    height: 0;
+    border-top: 1px dashed var(--line);
   }
-  .caps p {
-    margin-top: 0.7rem;
-    color: var(--on-deep-muted);
-    font-size: 0.98rem;
-    max-width: 22rem;
+  .story.is-live .held li {
+    animation: story-in 0.7s var(--ease) calc(0.4s + var(--n) * 0.55s) both;
   }
-
-  /* ---- scroll-driven: the agent travels while the section is pinned ---- */
-  @supports (animation-timeline: view()) {
-    @media (prefers-reduced-motion: no-preference) and (min-width: 761px) {
-      .story {
-        height: 300vh;
-      }
-      .pin {
-        position: sticky;
-        top: 0;
-        height: 100svh;
-        padding-top: 5.5rem;
-      }
-      .agent,
-      .ring,
-      .caps li,
-      .lines i {
-        animation-timeline: --story;
-        animation-range: cover 25% cover 75%;
-        animation-fill-mode: both;
-        animation-timing-function: linear;
-      }
-      .agent {
-        animation-name: travel;
-      }
-      .ring {
-        animation-name: story-close;
-      }
-      .caps li:nth-child(1) {
-        animation-name: on1;
-      }
-      .caps li:nth-child(2) {
-        animation-name: on2;
-      }
-      .caps li:nth-child(3) {
-        animation-name: on3;
-      }
-      .lines i {
-        animation-name: write;
-      }
-      .badge {
-        animation: stamp linear both;
-        animation-timeline: --story;
-        animation-range: cover 66% cover 75%;
-      }
-      .lines i:nth-child(2) {
-        animation-range: cover 66% cover 75%;
-      }
-      .lines i:nth-child(3) {
-        animation-range: cover 68% cover 75%;
-      }
-    }
+  .story.is-live .held svg path {
+    animation: story-draw 0.5s var(--ease) calc(0.8s + var(--n) * 0.55s) both;
   }
-  @keyframes travel {
-    0%,
-    10% {
-      left: 3.1rem;
-      scale: 1;
-    }
-    38%,
-    62% {
-      left: 50%;
-      scale: 0.82;
-    }
-    88% {
-      left: calc(100% - 3.1rem);
-      scale: 1;
-      opacity: 1;
-    }
-    100% {
-      left: calc(100% - 3.1rem);
-      scale: 0.25;
-      opacity: 0;
-    }
+  .story.is-live .loose em {
+    animation: story-blink 3.2s ease-in-out infinite;
   }
-  @keyframes story-close {
-    0%,
-    14% {
-      transform: scale(1.55);
-      opacity: 0.25;
-    }
-    38%,
-    62% {
-      transform: scale(1);
-      opacity: 1;
-    }
-    84%,
-    100% {
-      transform: scale(1.55);
-      opacity: 0.25;
-    }
-  }
-  @keyframes on1 {
-    0%,
-    26% {
-      opacity: 1;
-    }
-    36%,
-    100% {
-      opacity: 0.75;
-    }
-  }
-  @keyframes on2 {
-    0%,
-    26% {
-      opacity: 0.75;
-    }
-    38%,
-    60% {
-      opacity: 1;
-    }
-    70%,
-    100% {
-      opacity: 0.75;
-    }
-  }
-  @keyframes on3 {
-    0%,
-    62% {
-      opacity: 0.75;
-    }
-    76%,
-    100% {
-      opacity: 1;
-    }
-  }
-  @keyframes stamp {
+  @keyframes story-in {
     from {
       opacity: 0;
-      translate: 0 6px;
+      translate: 0 8px;
     }
   }
-  @keyframes write {
-    0%,
-    80% {
-      transform: scaleX(0);
-    }
-    100% {
-      transform: scaleX(1);
+  @keyframes story-draw {
+    from {
+      stroke-dashoffset: 16;
     }
   }
-
-  @media (max-width: 760px) {
-    .caps {
+  @keyframes story-blink {
+    50% {
+      opacity: 0.2;
+    }
+  }
+  @media (max-width: 860px) {
+    .cols {
       grid-template-columns: 1fr;
-      gap: 0.9rem;
-    }
-    .stage {
-      height: 11rem;
     }
   }
 </style>

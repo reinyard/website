@@ -3,9 +3,11 @@ title: Self-hosting
 description: How Reinyard is put together and what running it involves.
 ---
 
-Reinyard is self-hosted. The platform and its database run on infrastructure you control. Agents can still reach the services you grant them access to, such as Google Drive folders, which live outside your infrastructure.
+Reinyard runs on-premises: the platform and its database run on infrastructure you control. (The managed cloud and hybrid deployments are covered below.) Agents can still reach the services you grant them access to, which live outside your infrastructure.
 
 ## Architecture
+
+This is the on-premises deployment. In the cloud, runs execute in Google sandboxes instead of Docker Sandboxes.
 
 | Component | Technology |
 | --- | --- |
@@ -26,4 +28,4 @@ Step-by-step installation instructions will be published with the first release.
 
 ## Looking for the managed cloud?
 
-If you would rather not operate it yourself, see [Managed cloud](/docs/cloud/).
+If you would rather not operate it yourself, or want a hybrid setup, see [Managed cloud](/docs/cloud/).

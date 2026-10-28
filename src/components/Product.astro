@@ -1,426 +1,390 @@
 ---
-const caps = [
-  { id: 'versioned', t: 'Versioned like code', d: 'Each agent’s pipeline lives in Git, with commits, branches and merges. Every change has an author and a history.' },
-  { id: 'isolated', t: 'Isolated runs', d: 'Pipelines execute in Docker Sandboxes (microVMs) that are removed afterwards. Only the outputs come back.' },
-  { id: 'record', t: 'Every run on record', d: 'Logs, exit codes and generated files are kept and tied to the exact version that produced them.' },
-  { id: 'access', t: 'Scoped access', d: 'An agent can read only the Google Drive folders it has been granted, and nothing else.' },
-  { id: 'teams', t: 'Teams stay in control', d: 'Invite-only sign-in, workspaces with roles, and administrators who can see and manage every workspace.' },
-  { id: 'health', t: 'Problems are visible', d: 'An overview shows execution health and what needs attention next, drawn from your real run history.' },
+// six numbered plates on one ruled sheet, each with a small drawing of the capability.
+const plates = [
+  { t: 'Versioned like code', d: 'Each agent’s pipeline lives in Git, with commits, branches and merges. Every change has an author and a history.' },
+  { t: 'Isolated runs', d: 'Pipelines run in isolated sandboxes: Docker Sandboxes (microVMs) on-premises, Google sandboxes in the cloud.' },
+  { t: 'Every run on record', d: 'Logs, exit codes and generated files are kept and tied to the exact version that produced them.' },
+  { t: 'Scoped access', d: 'An agent can read only the folders it has been granted, and nothing else.' },
+  { t: 'Teams stay in control', d: 'Invite-only sign-in, workspaces with roles, and administrators who can see and manage every workspace.' },
+  { t: 'Problems are visible', d: 'An overview shows execution health and what needs attention next, drawn from your real run history.' },
 ];
-const people = ['A', 'M', 'J', 'S', 'L', 'R', 'T'];
+const cells = Array.from({ length: 24 }, (_, i) => (i === 14 ? 'bad' : i % 7 === 3 ? 'dim' : 'ok'));
 ---
 
-<section class="section" id="product">
+<section id="product" class="product" data-live>
   <div class="wrap">
-    <div class="head reveal">
+    <div class="head">
       <span class="label">Product</span>
       <h2 class="h2">Everything an agent needs. Only what it was granted.</h2>
     </div>
 
-    <div class="sel reveal" data-sel>
-      <div class="list" role="radiogroup" aria-label="Capabilities">
+    <div class="sheet brk">
+      <div class="plates">
         {
-          caps.map((c, i) => (
-            <>
-              <input class="sr-only" type="radio" name="cap" id={`c-${c.id}`} checked={i === 0} />
-              <label for={`c-${c.id}`}>
-                <span class="n mono">0{i + 1}</span>
-                <b>{c.t}</b>
-                <span class="d">{c.d}</span>
-              </label>
-            </>
+          plates.map((p, i) => (
+            <article class={`plate pl${i}`}>
+              <header><span class="hex mono">{i + 1}</span><h3>{p.t}</h3></header>
+              <div class="draw" aria-hidden="true">
+                {i === 0 && (
+                  <svg viewBox="0 0 260 110" fill="none">
+                    <path class="lane" d="M16 78H244" /><path class="lane br" d="M62 78C82 78 82 34 102 34H168C188 34 188 78 208 78" />
+                    <g class="nd"><circle cx="16" cy="78" r="6" /><circle cx="62" cy="78" r="6" /><circle cx="102" cy="34" r="6" /><circle cx="135" cy="34" r="6" class="hot" /><circle cx="168" cy="34" r="6" /><circle cx="208" cy="78" r="6" class="hot" /><circle cx="244" cy="78" r="6" /></g>
+                    <text x="16" y="100" class="t">main</text><text x="102" y="20" class="t">branch</text><text x="196" y="100" class="t">merge</text>
+                  </svg>
+                )}
+                {i === 1 && (
+                  <svg viewBox="176 128 672 768" fill="none" class="sb">
+                    <g class="rg" stroke-width="58" stroke-linecap="round" stroke-linejoin="round"><path d="M297 298 221 342V430" /><path d="M727 298 803 342V430" /><path d="M221 594V682L297 726" /><path d="M803 594V682L727 726" /><path d="M435 220 512 176 589 220" /><path d="M435 804 512 848 589 804" /></g>
+                    <path class="co" d="M512 400.1 608.9 456.1V568L512 623.9 415.1 568V456.1Z" stroke-width="28" stroke-linejoin="round" />
+                  </svg>
+                )}
+                {i === 2 && (
+                  <ul class="log mono"><li><b>✓</b>pipeline resolved</li><li><b>✓</b>sandbox started</li><li><b>✓</b>files returned</li><li class="x"><b>◆</b>run recorded · exit 0</li></ul>
+                )}
+                {i === 3 && (
+                  <ul class="tree mono"><li class="off"><i></i>Company</li><li class="on"><i></i>Finance<em>read-only</em></li><li class="off sub"><i></i>Payroll</li><li class="off"><i></i>Legal</li></ul>
+                )}
+                {i === 4 && (
+                  <div class="tiles"><span class="tl t1">Demo workspace</span><span class="tl t2">Finance team</span><span class="tl t3">Operations</span><span class="over mono">Administrators see all</span></div>
+                )}
+                {i === 5 && <div class="cells">{cells.map((c) => <i class={c}></i>)}</div>}
+              </div>
+              <p>{p.d}</p>
+            </article>
           ))
         }
       </div>
-
-      <div class="view" aria-hidden="true">
-        <!-- versioned -->
-        <div class="v v-versioned">
-          <svg viewBox="0 0 360 200" fill="none">
-            <path class="rail" d="M30 150H330" />
-            <path class="rail branch" d="M110 150C140 150 140 60 170 60H250C280 60 280 150 310 150" />
-            <circle class="nd" cx="30" cy="150" r="8" /><circle class="nd" cx="110" cy="150" r="8" />
-            <circle class="nd" cx="170" cy="60" r="8" /><circle class="nd hot" cx="210" cy="60" r="8" />
-            <circle class="nd" cx="250" cy="60" r="8" /><circle class="nd hot" cx="310" cy="150" r="8" />
-            <circle class="nd" cx="330" cy="150" r="8" />
-          </svg>
-        </div>
-        <!-- isolated -->
-        <div class="v v-isolated">
-          <svg viewBox="176 128 672 768" fill="none">
-            <g class="ring-anim" stroke-width="66" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M297 298 221 342V430" /><path d="M727 298 803 342V430" />
-              <path d="M221 594V682L297 726" /><path d="M803 594V682L727 726" />
-              <path d="M435 220 512 176 589 220" /><path d="M435 804 512 848 589 804" />
-            </g>
-            <path class="core" d="M512 400.1 608.9 456.1V568L512 623.9 415.1 568V456.1Z" stroke-width="28" stroke-linejoin="round" />
-          </svg>
-        </div>
-        <!-- record -->
-        <div class="v v-record">
-          <ul class="log mono">
-            <li><b>✓</b>pipeline resolved</li>
-            <li><b>✓</b>sandbox started</li>
-            <li><b>✓</b>outputs collected</li>
-            <li><b>◆</b>run recorded</li>
-          </ul>
-        </div>
-        <!-- access -->
-        <div class="v v-access">
-          <ul class="tree mono">
-            <li class="off">▸ Company</li>
-            <li class="on">▾ Finance <em>granted</em></li>
-            <li class="off sub">▸ Payroll</li>
-            <li class="off">▸ Legal</li>
-          </ul>
-        </div>
-        <!-- teams -->
-        <div class="v v-teams">
-          <div class="honey">{people.map((p) => <span>{p}</span>)}</div>
-        </div>
-        <!-- health -->
-        <div class="v v-health">
-          <div class="cells">
-            {Array.from({ length: 21 }, (_, i) => <i class={i === 9 ? 'warn' : ''} style={`--d:${(i * 83) % 1400}ms`}></i>)}
-          </div>
-        </div>
-      </div>
+      <footer class="strip mono"><span>Reinyard</span><span>Product sheet</span></footer>
     </div>
   </div>
 </section>
 
-<script>
-  // Gentle auto-advance until the visitor interacts. Skipped for reduced motion.
-  const root = document.querySelector<HTMLElement>('[data-sel]');
-  if (root && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    const inputs = [...root.querySelectorAll<HTMLInputElement>('input[type=radio]')];
-    let on = true, vis = false, held = false;
-    const stop = () => (on = false);
-    root.addEventListener('pointerenter', () => (held = true));
-    root.addEventListener('pointerleave', () => (held = false));
-    root.addEventListener('focusin', () => (held = true));
-    root.addEventListener('focusout', () => (held = false));
-    root.addEventListener('pointerdown', stop, { once: true });
-    root.addEventListener('keydown', stop, { once: true });
-    new IntersectionObserver(([e]) => (vis = e.isIntersecting)).observe(root);
-    setInterval(() => {
-      if (!on || !vis || held) return;
-      const i = inputs.findIndex((x) => x.checked);
-      inputs[(i + 1) % inputs.length].checked = true;
-    }, 5200);
-  }
-</script>
-
 <style>
+  .product {
+    padding-block: clamp(4rem, 9vw, 7.5rem);
+  }
   .head {
     max-width: 44rem;
   }
-  .sel {
-    margin-top: clamp(2.5rem, 5vw, 4rem);
+  .sheet {
+    --bl: 26px;
+    --bc: var(--blue);
+    --bw: 2px;
+    margin-top: clamp(2.2rem, 5vw, 3.4rem);
+    padding: 14px;
+  }
+  .plates {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: clamp(1.5rem, 4vw, 4rem);
-    align-items: start;
-  }
-  .list {
-    border-top: 1px solid var(--line);
-  }
-  label {
-    display: grid;
-    grid-template-columns: 2.4rem 1fr;
-    column-gap: 0.4rem;
-    padding: 1.15rem 0.25rem;
-    border-bottom: 1px solid var(--line);
-    cursor: pointer;
-    position: relative;
-  }
-  label::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: -1px;
-    height: 2px;
-    width: 100%;
-    background: var(--accent);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.5s var(--ease);
-  }
-  .n {
-    grid-row: span 2;
-    font-size: 0.78rem;
-    color: var(--muted);
-    padding-top: 0.35rem;
-  }
-  b {
-    font-weight: 600;
-    font-size: clamp(1.05rem, 1.6vw, 1.25rem);
-    letter-spacing: -0.02em;
-    color: var(--muted);
-    transition: color 0.25s;
-  }
-  .d {
-    grid-column: 2;
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
-    color: var(--muted);
-    font-size: 0.98rem;
-    transition: max-height 0.5s var(--ease), opacity 0.4s, margin 0.4s;
-  }
-  label:hover b {
-    color: var(--ink);
-  }
-  input:checked + label b {
-    color: var(--ink);
-  }
-  input:checked + label .n {
-    color: var(--blue-text);
-  }
-  input:checked + label .d {
-    max-height: 7rem;
-    opacity: 1;
-    margin-top: 0.5rem;
-  }
-  input:checked + label::before {
-    transform: scaleX(1);
-  }
-  input:focus-visible + label {
-    outline: 2px solid var(--blue-text);
-    outline-offset: -2px;
-  }
-
-  .view {
-    position: sticky;
-    top: 6rem;
-    aspect-ratio: 1 / 0.92;
-    background: var(--bg-2);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--line);
     border: 1px solid var(--line);
-    border-radius: var(--r-lg);
+  }
+  .plate {
+    background: var(--bg);
+    padding: 1.4rem 1.4rem 1.6rem;
+    display: grid;
+    grid-template-rows: auto 9.5rem auto;
+    gap: 1.1rem;
+    transition: background 0.3s;
+  }
+  .plate:hover {
+    background: var(--bg-2);
+  }
+  header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .hex {
+    flex: none;
     display: grid;
     place-items: center;
-    padding: 2.5rem;
+    width: 1.9rem;
+    height: 2.15rem;
+    background: var(--accent);
+    color: var(--on-accent);
+    font-size: 0.78rem;
+    font-weight: 600;
+    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
   }
-  .v {
-    grid-area: 1 / 1;
+  h3 {
+    font-size: 1.2rem;
+    letter-spacing: -0.03em;
+  }
+  .draw {
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    border: 1px dashed var(--line);
+    border-radius: 6px;
+    padding: 0.6rem;
+    overflow: hidden;
+    background-image: radial-gradient(color-mix(in srgb, var(--ink) 9%, transparent) 1px, transparent 1px);
+    background-size: 12px 12px;
+  }
+  p {
+    color: var(--muted);
+    font-size: 0.96rem;
+  }
+  /* 1 */
+  .draw svg {
     width: 100%;
-    opacity: 0;
-    transform: translateY(14px) scale(0.98);
-    transition: opacity 0.45s var(--ease), transform 0.6s var(--ease);
-    pointer-events: none;
+    max-height: 100%;
   }
-  /* show the visual matching the checked radio */
-  .sel:has(#c-versioned:checked) .v-versioned,
-  .sel:has(#c-isolated:checked) .v-isolated,
-  .sel:has(#c-record:checked) .v-record,
-  .sel:has(#c-access:checked) .v-access,
-  .sel:has(#c-teams:checked) .v-teams,
-  .sel:has(#c-health:checked) .v-health {
-    opacity: 1;
-    transform: none;
-  }
-
-  /* versioned */
-  .rail {
+  .lane {
     stroke: var(--line);
     stroke-width: 3;
     stroke-linecap: round;
   }
-  .branch {
-    stroke: var(--muted);
-    stroke-dasharray: 400;
-    stroke-dashoffset: 400;
+  .lane.br {
+    stroke: var(--ring);
+    stroke-dasharray: 260;
+    stroke-dashoffset: 260;
+    animation: product-draw 3.6s var(--ease) infinite;
+    animation-play-state: paused;
   }
-  .nd {
-    fill: var(--bg-2);
-    stroke: var(--muted);
-    stroke-width: 3;
+  .product.is-live .lane.br {
+    animation-play-state: running;
   }
-  .nd.hot {
-    fill: var(--blue);
-    stroke: var(--blue);
-  }
-  .sel:has(#c-versioned:checked) .branch {
-    animation: draw 1.6s 0.15s var(--ease) forwards;
-  }
-  @keyframes draw {
-    to {
+  @keyframes product-draw {
+    0% {
+      stroke-dashoffset: 260;
+    }
+    40%,
+    85% {
       stroke-dashoffset: 0;
     }
+    100% {
+      stroke-dashoffset: 0;
+      opacity: 0.2;
+    }
   }
-  .v-versioned svg {
-    width: 100%;
+  .nd circle {
+    fill: var(--bg);
+    stroke: var(--ring);
+    stroke-width: 3;
   }
-
-  /* isolated */
-  .v-isolated svg {
-    width: min(70%, 15rem);
-    margin-inline: auto;
-  }
-  .ring-anim {
-    stroke: var(--muted);
-    transform-origin: 512px 512px;
-  }
-  .core {
+  .nd .hot {
     fill: var(--blue);
     stroke: var(--blue);
   }
-  .sel:has(#c-isolated:checked) .ring-anim {
-    animation: ring-close 3.2s var(--ease) infinite;
+  .t {
+    font-family: var(--mono);
+    font-size: 9px;
+    fill: var(--muted);
+    letter-spacing: 0.06em;
   }
-  @keyframes ring-close {
+  /* 2 */
+  .draw .sb {
+    width: 6.2rem;
+    max-height: 100%;
+    overflow: visible;
+  }
+  .rg {
+    stroke: var(--muted);
+    transform-origin: 512px 512px;
+    animation: product-close 3.4s var(--ease) infinite;
+    animation-play-state: paused;
+  }
+  .product.is-live .rg {
+    animation-play-state: running;
+  }
+  .co {
+    fill: var(--core);
+    stroke: var(--core);
+  }
+  @keyframes product-close {
     0%,
-    100% {
-      transform: scale(1.28);
-      opacity: 0.45;
+    10% {
+      transform: scale(1.4);
+      opacity: 0.3;
     }
-    45%,
-    70% {
+    30%,
+    76% {
       transform: scale(1);
       opacity: 1;
     }
+    92%,
+    100% {
+      transform: scale(1.4);
+      opacity: 0.3;
+    }
   }
-
-  /* record */
+  /* 3 */
   .log {
+    justify-self: start;
     display: grid;
-    gap: 0.9rem;
-    font-size: clamp(0.85rem, 1.6vw, 1.05rem);
+    gap: 0.5rem;
+    font-size: 0.74rem;
     color: var(--ink-2);
   }
   .log li {
     opacity: 0;
-    transform: translateX(-10px);
+    animation: product-in 6s steps(1) infinite;
+    animation-play-state: paused;
+  }
+  .product.is-live .log li {
+    animation-play-state: running;
+  }
+  .log li:nth-child(2) {
+    animation-delay: 0.5s;
+  }
+  .log li:nth-child(3) {
+    animation-delay: 1s;
+  }
+  .log li:nth-child(4) {
+    animation-delay: 1.5s;
+    color: var(--ink);
   }
   .log b {
     color: var(--blue-text);
-    margin-right: 0.8rem;
+    margin-right: 0.55rem;
     font-weight: 500;
   }
-  .sel:has(#c-record:checked) .log li {
-    animation: in 0.5s var(--ease) forwards;
-  }
-  .sel:has(#c-record:checked) .log li:nth-child(2) {
-    animation-delay: 0.35s;
-  }
-  .sel:has(#c-record:checked) .log li:nth-child(3) {
-    animation-delay: 0.7s;
-  }
-  .sel:has(#c-record:checked) .log li:nth-child(4) {
-    animation-delay: 1.05s;
-    color: var(--ink);
-  }
-  @keyframes in {
-    to {
+  @keyframes product-in {
+    0% {
+      opacity: 0;
+    }
+    6%,
+    90% {
       opacity: 1;
-      transform: none;
+    }
+    100% {
+      opacity: 0;
     }
   }
-
-  /* access */
+  /* 4 */
   .tree {
+    justify-self: stretch;
     display: grid;
-    gap: 0.6rem;
-    font-size: clamp(0.85rem, 1.6vw, 1.05rem);
+    gap: 0.3rem;
+    font-size: 0.76rem;
   }
   .tree li {
-    padding: 0.7rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.3rem 0.5rem;
+    border-radius: 6px;
     color: var(--muted);
     border: 1px solid transparent;
-    border-radius: var(--r);
   }
   .tree .sub {
-    margin-left: 1.6rem;
+    margin-left: 1rem;
+  }
+  .tree i {
+    width: 0.8rem;
+    height: 0.58rem;
+    border: 1.5px solid currentColor;
+    border-radius: 2px;
   }
   .tree .on {
     color: var(--ink);
-    background: var(--blue-soft);
-    border-color: color-mix(in srgb, var(--blue) 45%, transparent);
-    display: flex;
-    justify-content: space-between;
+    background: var(--a-1);
+    border-color: var(--a-3);
+    font-weight: 600;
+  }
+  .tree .on i {
+    background: var(--blue);
+    border-color: var(--blue);
   }
   .tree em {
+    margin-left: auto;
     font-style: normal;
     color: var(--blue-text);
-    font-size: 0.72em;
+    font-size: 0.9em;
+  }
+  /* 5 */
+  .tiles {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  .tl {
+    position: absolute;
+    left: 0;
+    right: 0;
+    padding: 0.4rem 0.7rem;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    background: var(--bg-2);
+    font-size: 0.74rem;
+    transition: transform 0.5s var(--ease);
+  }
+  .t1 {
+    top: 0.1rem;
+    left: 0.2rem;
+    right: 28%;
+  }
+  .t2 {
+    top: 2.2rem;
+    left: 14%;
+    right: 14%;
+  }
+  .t3 {
+    top: 4.3rem;
+    left: 28%;
+    right: 0.2rem;
+  }
+  .plate:hover .t1 {
+    transform: translateX(-4px);
+  }
+  .plate:hover .t3 {
+    transform: translateX(4px);
+  }
+  .over {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0.25rem 0.5rem;
+    border-top: 1px dashed var(--blue);
+    color: var(--blue-text);
+    font-size: 0.66rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+    text-align: center;
   }
-
-  /* teams: a small honeycomb of hexagonal avatars */
-  .honey {
-    --s: clamp(3.6rem, 9vw, 5.2rem);
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: calc(var(--s) * 3.4);
-    margin-inline: auto;
-  }
-  .honey span {
-    width: var(--s);
-    height: calc(var(--s) * 1.1547);
-    margin: calc(var(--s) * -0.14) calc(var(--s) * 0.015);
-    display: grid;
-    place-items: center;
-    font-weight: 600;
-    font-size: calc(var(--s) * 0.3);
-    background: var(--bg-3);
-    color: var(--ink);
-    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
-  }
-  .honey span:nth-child(5) {
-    margin-left: calc(var(--s) * 0.5);
-  }
-  .honey span:nth-child(1),
-  .honey span:nth-child(6) {
-    background: var(--accent);
-    color: var(--on-accent);
-  }
-
-  /* health: a honeycomb heat map */
+  /* 6 */
   .cells {
-    --s: clamp(2.2rem, 6vw, 3.4rem);
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    width: calc(var(--s) * 7.2);
-    margin-inline: auto;
+    gap: 0.35rem;
   }
   .cells i {
-    width: var(--s);
-    height: calc(var(--s) * 1.1547);
-    margin: calc(var(--s) * -0.14) calc(var(--s) * 0.015);
+    width: 1.5rem;
+    height: 1.7rem;
     background: var(--blue);
-    opacity: 0.5;
+    opacity: 0.78;
     clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
   }
-  .sel:has(#c-health:checked) .cells i {
-    animation: pulse 3.2s ease-in-out infinite;
-    animation-delay: var(--d);
+  .cells .dim {
+    opacity: 0.38;
   }
-  .cells i:nth-child(7n + 1) {
-    margin-left: calc(var(--s) * 0.5);
-  }
-  .cells i.warn {
+  .cells .bad {
     background: var(--red);
-    opacity: 0.95;
+    opacity: 1;
   }
-  @keyframes pulse {
-    50% {
-      opacity: 0.95;
+  .strip {
+    margin-top: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    padding-inline: 0.2rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  @media (max-width: 980px) {
+    .plates {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
-
-  @media (max-width: 860px) {
-    .sel {
+  @media (max-width: 640px) {
+    .plates {
       grid-template-columns: 1fr;
-    }
-    .view {
-      position: relative;
-      top: 0;
-      order: -1;
-      aspect-ratio: 1 / 0.7;
-      padding: 1.5rem;
     }
   }
 </style>
