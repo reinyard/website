@@ -1,0 +1,144 @@
+---
+// the three verbs on one rail. A hexagon travels between them and each gets a small glyph of what it means.
+const steps = [
+  { t: 'Define', d: 'Pipelines live in Git', g: 'git' },
+  { t: 'Isolate', d: 'Runs execute in sandboxes', g: 'box' },
+  { t: 'Record', d: 'Every run is kept', g: 'rec' },
+];
+---
+
+<section class="strip" data-live>
+  <ol class="wrap rail">
+    <i class="dot" aria-hidden="true"></i>
+    {
+      steps.map((s, i) => (
+        <li style={`--i:${i}`}>
+          <span class="g" aria-hidden="true">
+            {s.g === 'git' && (
+              <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3" /><circle cx="9" cy="24" r="3" /><circle cx="23" cy="14" r="3" /><path d="M9 11v10M23 17c0 5-6 5-14 7" /></svg>
+            )}
+            {s.g === 'box' && (
+              <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 11V6h5M22 6h5v5M27 21v5h-5M10 26H5v-5" /><path d="M16 11l5 3v4l-5 3-5-3v-4z" fill="currentColor" stroke="none" /></svg>
+            )}
+            {s.g === 'rec' && (
+              <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="20" height="24" rx="3" /><path d="M11 11h10M11 16h10M11 21h6" /></svg>
+            )}
+          </span>
+          <div><b>{s.t}</b><span>{s.d}</span></div>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<style>
+  .strip {
+    border-block: 1px solid var(--line);
+    background: var(--bg);
+  }
+  .rail {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .rail::before {
+    content: '';
+    position: absolute;
+    left: var(--gutter);
+    right: var(--gutter);
+    top: 0;
+    height: 2px;
+    background: repeating-linear-gradient(90deg, var(--a-3) 0 8px, transparent 8px 16px);
+  }
+  .dot {
+    position: absolute;
+    top: -0.34rem;
+    left: var(--gutter);
+    width: 0.8rem;
+    height: 0.9rem;
+    background: var(--core);
+    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+    opacity: 0;
+  }
+  .strip.is-live .dot {
+    animation: strip-run 6s var(--ease) infinite;
+  }
+  @keyframes strip-run {
+    0% {
+      left: var(--gutter);
+      opacity: 0;
+    }
+    6% {
+      opacity: 1;
+    }
+    50% {
+      left: calc(var(--gutter) + (100% - 2 * var(--gutter)) / 2);
+    }
+    94% {
+      opacity: 1;
+    }
+    100% {
+      left: calc(100% - var(--gutter));
+      opacity: 0;
+    }
+  }
+  li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.1rem;
+    align-items: center;
+    padding: 2rem 1.4rem 2.1rem 0;
+  }
+  li + li {
+    padding-left: 1.6rem;
+    border-left: 1px solid var(--line);
+  }
+  .g {
+    width: 3.2rem;
+    height: 3.2rem;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    background: var(--bg-2);
+    color: var(--blue);
+    transition:
+      transform 0.4s var(--ease),
+      border-color 0.3s;
+  }
+  li:hover .g {
+    transform: translateY(-3px);
+    border-color: var(--blue);
+  }
+  .g svg {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+  li b {
+    display: block;
+    font-size: 1.2rem;
+    letter-spacing: -0.025em;
+    font-weight: 600;
+  }
+  li span:not(.g) {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  @media (max-width: 720px) {
+    .rail {
+      grid-template-columns: 1fr;
+    }
+    .rail::before,
+    .dot {
+      display: none;
+    }
+    li {
+      padding: 1.2rem 0;
+    }
+    li + li {
+      padding-left: 0;
+      border-left: 0;
+      border-top: 1px solid var(--line);
+    }
+  }
+</style>

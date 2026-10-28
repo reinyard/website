@@ -1,92 +1,154 @@
 ---
+// the footer as the page's table of contents. Large numbered rows, hairlines between, and a plain line
+// about where the product stands. Reads like the end of a document, not a link dump.
 import Wordmark from './Wordmark.astro';
+const items = [
+  { n: '01', t: 'Product', href: '/#product' },
+  { n: '02', t: 'Pricing', href: '/#pricing' },
+  { n: '03', t: 'Documentation', href: '/docs/' },
+  { n: '04', t: 'Security model', href: '/docs/security/' },
+  { n: '05', t: 'About', href: '/about/' },
+  { n: '06', t: 'GitHub', href: 'https://github.com/reinyard', ext: true },
+  { n: '07', t: 'Contact', href: 'mailto:contact@reinyard.com' },
+  { n: '08', t: 'Licenses', href: '/licenses/' },
+];
 ---
 
-<footer class="foot">
-  <div class="wrap grid">
-    <div class="about">
+<footer class="footer">
+  <div class="wrap main">
+    <div class="who">
       <Wordmark />
-      <p>A controlled place for agents to work.</p>
+      <p class="line">A controlled place for agents to work.</p>
+      <p class="state mono"><i></i>Self-hosted first · managed cloud coming soon</p>
     </div>
-    <nav aria-label="Product">
-      <h2>Product</h2>
-      <a href="/#product">Features</a>
-      <a href="/#pricing">Pricing</a>
-      <a href="/docs/">Documentation</a>
-    </nav>
-    <nav aria-label="Company">
-      <h2>Company</h2>
-      <a href="/about/">About</a>
-      <a href="https://github.com/reinyard" rel="noopener">GitHub</a>
-      <a href="mailto:contact@reinyard.com">Contact</a>
-    </nav>
-    <nav aria-label="Security">
-      <h2>Security</h2>
-      <a href="/docs/security/">Security model</a>
-      <a href="mailto:security@reinyard.com">Report a vulnerability</a>
-      <a href="/licenses/">Licenses</a>
-    </nav>
+    <ol>
+      {
+        items.map((x) => (
+          <li>
+            <a href={x.href} rel={x.ext ? 'noopener' : undefined}>
+              <span class="n mono">{x.n}</span>
+              <span class="t">{x.t}</span>
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12L12 4M6 4h6v6" /></svg>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
   </div>
   <div class="wrap legal">
     <span>© 2026 Reinyard</span>
-    <span class="mono">reinyard.com</span>
+    <a href="mailto:security@reinyard.com">Report a vulnerability</a>
   </div>
 </footer>
 
 <style>
-  .foot {
+  .footer {
     background: var(--bg);
-    border-top: 1px solid var(--line);
-    padding-top: clamp(3rem, 6vw, 4.5rem);
+    padding-top: clamp(3rem, 7vw, 5rem);
   }
-  .grid {
+  .main {
     display: grid;
-    grid-template-columns: 1.6fr repeat(3, 1fr);
-    gap: 2.5rem;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: clamp(2rem, 6vw, 5rem);
+    align-items: start;
   }
-  .about p {
-    color: var(--muted);
-    margin-top: 1rem;
-    max-width: 17rem;
-  }
-  nav {
+  .who {
     display: grid;
-    align-content: start;
-    gap: 0.7rem;
+    gap: 1rem;
+    justify-items: start;
   }
-  h2 {
-    font-family: var(--mono);
+  .line {
+    font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+    letter-spacing: -0.035em;
+    line-height: 1.12;
+    max-width: 16rem;
+  }
+  .state {
+    display: inline-flex;
+    gap: 0.6rem;
+    align-items: center;
     font-size: 0.72rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
+    letter-spacing: 0.06em;
     color: var(--muted);
-    font-weight: 500;
-    margin-bottom: 0.4rem;
   }
-  nav a {
-    width: fit-content;
-    color: var(--ink-2);
-    font-size: 0.97rem;
-    transition: color 0.2s;
+  .state i {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--blue);
   }
-  nav a:hover {
+  ol {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: clamp(1.4rem, 4vw, 3rem);
+    border-top: 1px solid var(--line);
+  }
+  li {
+    border-bottom: 1px solid var(--line);
+  }
+  ol a {
+    display: grid;
+    grid-template-columns: 2rem 1fr auto;
+    align-items: baseline;
+    gap: 0.4rem;
+    padding: 0.95rem 0;
+    transition: padding 0.3s var(--ease), color 0.2s;
+  }
+  .n {
+    font-size: 0.7rem;
+    color: var(--muted);
+  }
+  .t {
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  ol svg {
+    width: 0.95rem;
+    height: 0.95rem;
+    color: var(--muted);
+    opacity: 0;
+    transition: opacity 0.2s, translate 0.3s var(--ease);
+  }
+  ol a:hover,
+  ol a:focus-visible {
+    padding-left: 0.5rem;
     color: var(--blue-text);
+  }
+  ol a:hover .t,
+  ol a:focus-visible .t {
+    color: var(--blue-text);
+  }
+  ol a:hover .n {
+    color: var(--blue-text);
+  }
+  ol a:hover svg,
+  ol a:focus-visible svg {
+    opacity: 1;
+    color: var(--blue-text);
+    translate: 2px -2px;
   }
   .legal {
     display: flex;
     justify-content: space-between;
-    margin-top: 3.5rem;
-    padding-block: 1.5rem;
-    border-top: 1px solid var(--line);
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: clamp(2.4rem, 5vw, 3.6rem);
+    padding-block: 1.3rem;
+    font-size: 0.84rem;
     color: var(--muted);
-    font-size: 0.85rem;
   }
-  @media (max-width: 720px) {
-    .grid {
-      grid-template-columns: 1fr 1fr;
+  .legal a:hover {
+    color: var(--blue-text);
+  }
+  @media (max-width: 860px) {
+    .main {
+      grid-template-columns: 1fr;
     }
-    .about {
-      grid-column: 1 / -1;
+  }
+  @media (max-width: 480px) {
+    ol {
+      grid-template-columns: 1fr;
     }
   }
 </style>

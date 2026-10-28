@@ -1,0 +1,43 @@
+---
+// A panel in the app: title, optional tag, content.
+interface Props { title: string; tag?: string; }
+const { title, tag } = Astro.props;
+---
+<section class="card">
+  <header><b>{title}</b>{tag && <span class="t">{tag}</span>}</header>
+  <div class="in"><slot /></div>
+</section>
+<style>
+  .card {
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    min-width: 0;
+  }
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.55rem 0.75rem;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.78em;
+  }
+  b {
+    font-weight: 600;
+  }
+  .t {
+    font-family: var(--mono);
+    font-size: 0.78em;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    padding: 0.1rem 0.45rem;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+  }
+  .in {
+    padding: 0.6rem 0.75rem;
+    display: grid;
+    gap: 0.45rem;
+  }
+</style>

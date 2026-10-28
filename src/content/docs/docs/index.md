@@ -10,9 +10,9 @@ The name is the idea: a _rein_ to guide and restrain, and a _yard_ to work in.
 ## What you get
 
 - **Versioned agents.** An agent's pipeline lives in Git, with commits, branches and merges.
-- **Isolated runs.** Pipelines execute in Docker Sandboxes (microVMs) that are removed afterwards. Only the outputs come back.
+- **Isolated runs.** Pipelines execute in isolated sandboxes: Docker Sandboxes (microVMs) on-premises, Google sandboxes in the cloud. On-premises, each sandbox is removed afterwards and only the outputs come back.
 - **A record of every run.** Logs, exit codes and generated files are kept and tied to the version that produced them.
-- **Scoped access.** An agent can read only the Google Drive folders it has been granted.
+- **Scoped access.** An agent can read only the folders it has been granted.
 - **Team controls.** Invite-only sign-in, workspaces with roles, and administrators who can see and manage every workspace.
 - **Visible health.** An overview of execution health and what needs attention next, built from your real run history.
 

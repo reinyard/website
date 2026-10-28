@@ -1,128 +1,202 @@
 ---
+// a question list on the left and one answer, set large, on the right. Arrow keys move through the list.
 const items = [
-  { q: 'How are runs isolated?', a: 'Every run executes in its own Docker Sandbox, a microVM created for that run. When it finishes, the sandbox is removed and only the outputs come back.' },
-  { q: 'What can an agent access?', a: 'Only what it has been granted. Access to Google Drive is per agent and per folder, read-only. Anything outside the granted folders is out of range.' },
-  { q: 'Where does my data live?', a: 'Reinyard is self-hosted, so it runs on infrastructure you control, with SQLite or Postgres as the database.' },
-  { q: 'Who can sign in, and who sees what?', a: 'Sign-in is invite-only. Work is organized in workspaces with roles. Administrators can see and manage every workspace, so choose them carefully.' },
-  { q: 'Can I change an agent without losing track of it?', a: 'Changes are versioned, so they are easy to review and undo. A pipeline lives in Git with branches and merges, commits never change, and every run is tied to the exact commit that produced it. Editing saves a new commit.' },
-  { q: 'Is there a managed cloud?', a: 'It is planned, not available yet. Pricing will be announced at launch. Write to contact@reinyard.com to hear when it opens.' },
-  { q: 'How do I get it?', a: 'Installation instructions will be published with the first release. Until then, the documentation describes how the platform fits together.' },
-  { q: 'Is it ready to host for other companies?', a: 'Not yet. Reinyard is under active development and is not ready for public multi-tenant hosting. Run it for your own organization.' },
+  { q: 'How are runs isolated?', a: 'Every run executes in its own sandbox: a Docker Sandbox (a microVM) when you run Reinyard on-premises, a Google sandbox in the cloud. On-premises, the sandbox is removed when the run finishes and only the outputs come back.', more: { t: 'Security model', href: '/docs/security/' } },
+  { q: 'What can an agent access?', a: 'Only what it has been granted. Access is per agent and per folder, read-only. Anything outside the granted folders is out of range.', more: { t: 'Security model', href: '/docs/security/' } },
+  { q: 'Where does my data live?', a: 'Your choice. On-premises, Reinyard runs on infrastructure you control, with SQLite or Postgres as the database. A managed cloud (SaaS) is planned, and Enterprise can also be hybrid.', more: { t: 'Self-hosting', href: '/docs/self-hosting/' } },
+  { q: 'Who can sign in, and who sees what?', a: 'Sign-in is invite-only. Work is organized in workspaces with roles. Administrators can see and manage every workspace, so choose them carefully.', more: { t: 'Security model', href: '/docs/security/' } },
+  { q: 'Can I change an agent without losing track of it?', a: 'Changes are versioned, so they are easy to review and undo. A pipeline lives in Git with branches and merges, commits never change, and every run is tied to the exact commit that produced it. Editing saves a new commit.', more: { t: 'Documentation', href: '/docs/' } },
+  { q: 'Is there a managed cloud?', a: 'It is planned, not available yet. Pricing will be announced at launch, and Enterprise will be offered as SaaS, on-premises or hybrid. Write to contact@reinyard.com to hear when it opens.', more: { t: 'Managed cloud', href: '/docs/cloud/' } },
+  { q: 'How do I get it?', a: 'Installation instructions will be published with the first release. Until then, the documentation describes how the platform fits together.', more: { t: 'Self-hosting', href: '/docs/self-hosting/' } },
+  { q: 'Is it ready to host for other companies?', a: 'Not yet. Reinyard is under active development and is not ready for public multi-tenant hosting. Run it for your own organization.', more: { t: 'Self-hosting', href: '/docs/self-hosting/' } },
 ];
 ---
 
-<section class="section" id="faq">
-  <div class="wrap split">
-    <div class="reveal head">
+<section id="faq" class="faq" data-live>
+  <div class="wrap">
+    <header class="head">
       <span class="label">FAQ</span>
       <h2 class="h2">Questions we expect.</h2>
-      <p class="lead">Short, plain answers. The documentation goes deeper.</p>
-      <a class="btn" href="/docs/">
-        Read the docs
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
-      </a>
-    </div>
+    </header>
 
-    <div class="list reveal">
-      {
-        items.map((it, i) => (
-          <details name="faq" open={i === 0}>
-            <summary><span>{it.q}</span><i aria-hidden="true"></i></summary>
-            <p>{it.a}</p>
-          </details>
-        ))
-      }
+    <div class="reader">
+      <div class="qs" role="radiogroup" aria-label="Questions">
+        {
+          items.map((it, i) => (
+            <>
+              <input class="sr-only" type="radio" name="faq-q" id={`faq-${i}`} checked={i === 0} />
+              <label for={`faq-${i}`}>
+                <span class="n mono">{String(i + 1).padStart(2, '0')}</span>
+                <span>{it.q}</span>
+              </label>
+            </>
+          ))
+        }
+      </div>
+
+      <div class="answers" aria-live="polite">
+        {
+          items.map((it, i) => (
+            <article class={`ans a${i}`}>
+              <span class="mono kk">Question {String(i + 1).padStart(2, '0')}</span>
+              <h3>{it.q}</h3>
+              <p>{it.a}</p>
+              <a class="more" href={it.more.href}>
+                {it.more.t}
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4" /></svg>
+              </a>
+            </article>
+          ))
+        }
+      </div>
     </div>
   </div>
 </section>
 
 <style>
-  .split {
-    display: grid;
-    grid-template-columns: 0.8fr 1.2fr;
-    gap: clamp(2rem, 6vw, 5rem);
-    align-items: start;
-  }
-  .head .btn {
-    margin-top: 1.8rem;
+  .faq {
+    padding-block: clamp(4rem, 8vw, 7rem);
   }
   .head {
-    position: sticky;
-    top: 6.5rem;
+    display: grid;
+    gap: 0.9rem;
   }
-  .list {
+  .reader {
+    margin-top: clamp(2rem, 5vw, 3.4rem);
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(1.5rem, 5vw, 4.5rem);
+    align-items: start;
+  }
+  .qs {
+    display: grid;
     border-top: 1px solid var(--line);
   }
-  details {
+  .qs label {
+    display: grid;
+    grid-template-columns: 2.2rem 1fr;
+    gap: 0.4rem;
+    align-items: baseline;
+    padding: 0.95rem 0.5rem 0.95rem 0.2rem;
     border-bottom: 1px solid var(--line);
-  }
-  summary {
-    list-style: none;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 1.25rem 0.2rem;
     cursor: pointer;
-    font-size: 1.06rem;
-    font-weight: 600;
-    letter-spacing: -0.015em;
-    transition: color 0.2s;
-  }
-  summary::-webkit-details-marker {
-    display: none;
-  }
-  summary:hover {
-    color: var(--blue-text);
-  }
-  summary i {
-    flex: none;
+    font-size: 1.02rem;
+    color: var(--muted);
     position: relative;
-    width: 1.5rem;
-    height: 1.5rem;
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    background: var(--bg-2);
+    transition:
+      color 0.25s,
+      padding 0.3s var(--ease);
   }
-  summary i::before,
-  summary i::after {
+  .qs label::before {
     content: '';
     position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 0.6rem;
-    height: 1.5px;
-    background: var(--ink);
-    translate: -50% -50%;
-    transition: transform 0.3s var(--ease);
+    left: 0;
+    top: -1px;
+    height: 2px;
+    width: 0;
+    background: var(--blue);
+    transition: width 0.4s var(--ease);
   }
-  summary i::after {
-    transform: rotate(90deg);
-  }
-  details[open] summary i::after {
-    transform: rotate(0deg);
-  }
-  details[open] summary {
+  .qs label:hover {
     color: var(--ink);
   }
-  details p {
-    padding: 0 2.6rem 1.4rem 0.2rem;
-    color: var(--muted);
-    max-width: 38rem;
-    animation: open 0.4s var(--ease);
+  .n {
+    font-size: 0.72rem;
+    color: var(--blue-text);
   }
-  @keyframes open {
-    from {
-      opacity: 0;
-      transform: translateY(-6px);
-    }
+  .qs input:checked + label {
+    color: var(--ink);
+    font-weight: 600;
+    padding-left: 0.7rem;
+  }
+  .qs input:checked + label::before {
+    width: 100%;
+  }
+  .qs input:focus-visible + label {
+    outline: 2px solid var(--focus);
+    outline-offset: -2px;
+  }
+
+  .answers {
+    display: grid;
+    position: sticky;
+    top: 8rem;
+    min-height: 22rem;
+  }
+  .ans {
+    grid-area: 1 / 1;
+    align-self: start;
+    display: grid;
+    gap: 1.1rem;
+    justify-items: start;
+    padding: clamp(1.4rem, 3vw, 2.4rem);
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    opacity: 0;
+    visibility: hidden;
+    translate: 12px 0;
+    transition:
+      opacity 0.35s var(--ease),
+      translate 0.35s var(--ease),
+      visibility 0s 0.35s;
+  }
+  .kk {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--blue-text);
+  }
+  .ans h3 {
+    font-size: clamp(1.5rem, 2.8vw, 2.2rem);
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+  }
+  .ans p {
+    color: var(--ink-2);
+    font-size: 1.1rem;
+    line-height: 1.6;
+  }
+  .more {
+    display: inline-flex;
+    gap: 0.5rem;
+    align-items: center;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--line);
+    align-self: stretch;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--blue-text);
+  }
+  .more svg {
+    width: 0.95rem;
+    height: 0.95rem;
+    transition: translate 0.25s var(--ease);
+  }
+  .more:hover svg {
+    translate: 4px 0;
+  }
+  .faq:has(#faq-0:checked) .a0,
+  .faq:has(#faq-1:checked) .a1,
+  .faq:has(#faq-2:checked) .a2,
+  .faq:has(#faq-3:checked) .a3,
+  .faq:has(#faq-4:checked) .a4,
+  .faq:has(#faq-5:checked) .a5,
+  .faq:has(#faq-6:checked) .a6,
+  .faq:has(#faq-7:checked) .a7 {
+    opacity: 1;
+    visibility: visible;
+    translate: 0;
+    transition-delay: 0s;
   }
   @media (max-width: 860px) {
-    .split {
+    .reader {
       grid-template-columns: 1fr;
     }
-    .head {
+    .answers {
       position: static;
+      min-height: 0;
+      order: -1;
     }
   }
 </style>

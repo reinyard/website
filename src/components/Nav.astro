@@ -1,5 +1,6 @@
 ---
-import Wordmark from './Wordmark.astro';
+// a compact pill that floats above the page and blurs what scrolls under it.
+import Mark from './Mark.astro';
 import ThemeSwitch from './ThemeSwitch.astro';
 import GithubIcon from './GithubIcon.astro';
 const links = [
@@ -10,22 +11,17 @@ const links = [
 ];
 ---
 
-<header class="nav">
+<div class="nav">
   <a class="skip" href="#main">Skip to content</a>
-  <div class="wrap bar">
-    <Wordmark />
-
+  <header class="pill">
+    <a class="brand" href="/" aria-label="reinyard home"><Mark size={28} /><span>reinyard.</span></a>
     <nav class="links" aria-label="Primary">
       {links.map((l) => <a href={l.href}>{l.label}</a>)}
     </nav>
-
     <div class="actions">
-      <a class="gh" href="https://github.com/reinyard" rel="noopener" aria-label="Reinyard on GitHub" title="GitHub"><GithubIcon /></a>
+      <a class="gh" href="https://github.com/reinyard" rel="noopener" aria-label="Reinyard on GitHub" title="GitHub"><GithubIcon size={19} /></a>
       <ThemeSwitch />
-      <button class="login" type="button" disabled aria-disabled="true" title="The managed cloud is coming soon">
-        <span>Log in</span><em>Soon</em>
-      </button>
-
+      <button class="login" type="button" disabled aria-disabled="true" title="The managed cloud is coming soon"><span>Log in</span><em>Soon</em></button>
       <details class="menu">
         <summary aria-label="Menu"><span></span><span></span></summary>
         <div class="sheet">
@@ -35,8 +31,8 @@ const links = [
         </div>
       </details>
     </div>
-  </div>
-</header>
+  </header>
+</div>
 
 <script>
   // The mobile menu is a <details>: close it after choosing a link (same-page anchors do not reload) and on Escape.
@@ -55,12 +51,13 @@ const links = [
 </script>
 
 <style>
+  /* floats over the page, so the hero's hexagon field runs right up to the top edge */
   .nav {
-    position: sticky;
-    top: 0;
+    position: fixed;
+    inset: 0 0 auto;
     z-index: 50;
-    background: var(--bg);
-    border-bottom: 1px solid var(--line);
+    padding: 0.75rem var(--gutter);
+    pointer-events: none;
   }
   .skip {
     position: absolute;
@@ -75,96 +72,96 @@ const links = [
   .skip:focus {
     top: 0.75rem;
   }
-  .bar {
+  .nav > * {
+    pointer-events: auto;
+  }
+  .pill {
+    position: relative;
+    max-width: 62rem;
+    margin-inline: auto;
     display: flex;
     align-items: center;
-    height: 4.25rem;
-    gap: 2rem;
+    gap: 1.2rem;
+    padding: 0.45rem 0.55rem 0.45rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--bg-2) 78%, transparent);
+    backdrop-filter: blur(14px) saturate(1.4);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
+    box-shadow: 0 16px 40px -24px color-mix(in srgb, var(--ink) 55%, transparent);
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    letter-spacing: -0.04em;
+    color: var(--ink);
   }
   .links {
     display: flex;
-    gap: 0.1rem;
+    margin-left: 0.8rem;
   }
   .links a {
-    padding: 0.5rem 0.85rem;
-    color: var(--muted);
-    font-size: 0.92rem;
+    padding: 0.45rem 0.85rem;
+    font-size: 0.9rem;
     font-weight: 500;
-    position: relative;
-    transition: color 0.2s;
-  }
-  .links a::after {
-    content: '';
-    position: absolute;
-    left: 0.85rem;
-    right: 0.85rem;
-    bottom: 0.25rem;
-    height: 2px;
-    background: var(--blue-text);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.3s var(--ease);
+    color: var(--muted);
+    border-radius: 999px;
+    transition:
+      color 0.2s,
+      background 0.2s;
   }
   .links a:hover {
     color: var(--ink);
-  }
-  .links a:hover::after {
-    transform: scaleX(1);
+    background: var(--bg-3);
   }
   .actions {
     margin-left: auto;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
   }
   .gh {
     display: grid;
     place-items: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: var(--r);
+    width: 2.3rem;
+    height: 2.3rem;
+    border-radius: 50%;
     color: var(--muted);
-    transition: color 0.2s, background 0.2s;
   }
   .gh:hover {
     color: var(--ink);
     background: var(--bg-3);
   }
-  .sheet .gh-row {
-    display: flex;
-    align-items: center;
-    gap: 0.7rem;
-  }
-  .login {
+  .login,
+  .login-m {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
-    height: 2.5rem;
-    padding: 0 0.5rem 0 1rem;
-    margin-left: 0.3rem;
-    border-radius: var(--r);
+    gap: 0.55rem;
+    height: 2.3rem;
+    padding: 0 0.4rem 0 0.95rem;
+    border-radius: 999px;
     border: 1px dashed var(--line);
     background: transparent;
     color: var(--muted);
     font: inherit;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     font-weight: 500;
     cursor: not-allowed;
   }
-  .login em,
-  .login-m em {
+  em {
     font-style: normal;
     font-family: var(--mono);
-    font-size: 0.64rem;
-    font-weight: 500;
+    font-size: 0.62rem;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--blue-text);
     background: var(--blue-soft);
     padding: 0.2rem 0.5rem;
-    border-radius: 6px;
+    border-radius: 999px;
   }
-
   .menu {
     display: none;
   }
@@ -172,11 +169,11 @@ const links = [
     list-style: none;
     display: grid;
     place-content: center;
-    gap: 6px;
-    width: 2.6rem;
-    height: 2.6rem;
+    gap: 5px;
+    width: 2.3rem;
+    height: 2.3rem;
+    border-radius: 50%;
     border: 1px solid var(--line);
-    border-radius: var(--r);
     background: var(--bg-2);
     cursor: pointer;
   }
@@ -184,46 +181,44 @@ const links = [
     display: none;
   }
   .menu summary span {
-    width: 16px;
+    width: 14px;
     height: 2px;
     background: var(--ink);
-    transition: transform 0.25s var(--ease);
-  }
-  .menu[open] summary span:first-child {
-    transform: translateY(4px) rotate(45deg);
-  }
-  .menu[open] summary span:last-child {
-    transform: translateY(-4px) rotate(-45deg);
   }
   .sheet {
     position: absolute;
     left: 0;
     right: 0;
-    top: 100%;
-    padding: 0.5rem var(--gutter) 1.25rem;
-    background: var(--bg);
-    border-bottom: 1px solid var(--line);
+    top: calc(100% + 0.5rem);
+    padding: 0.4rem 1.2rem 1rem;
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    background: var(--bg-2);
     display: grid;
+    z-index: 5;
   }
   .sheet a,
-  .login-m {
-    padding: 0.9rem 0;
+  .sheet .login-m {
+    padding: 0.75rem 0;
     border-bottom: 1px solid var(--line);
-    font-size: 1rem;
-    font-weight: 500;
+    color: var(--ink);
   }
-  .login-m {
+  .sheet .gh-row {
     display: flex;
-    align-items: center;
     gap: 0.7rem;
-    color: var(--muted);
-    border-bottom: 0;
+    align-items: center;
   }
-
+  .sheet .login-m {
+    border: 0;
+    height: auto;
+    border-radius: 0;
+    justify-content: space-between;
+    padding-right: 0;
+  }
   @media (max-width: 860px) {
     .links,
-    .login,
-    .gh {
+    .actions > .gh,
+    .login {
       display: none;
     }
     .menu {

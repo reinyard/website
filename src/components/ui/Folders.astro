@@ -1,0 +1,67 @@
+---
+// Scoped access: an agent reads only the folders it has been granted.
+interface Props { granted?: string[] }
+const { granted = ['Finance'] } = Astro.props;
+const tree = [
+  { n: 'Company', d: 0 },
+  { n: 'Finance', d: 1 },
+  { n: 'Payroll', d: 2 },
+  { n: 'Legal', d: 1 },
+  { n: 'Product', d: 1 },
+];
+---
+<ul class="tree">
+  {
+    tree.map((t) => {
+      const on = granted.includes(t.n);
+      return (
+        <li class:list={{ on }} style={`--d:${t.d}`}>
+          <i class="f"></i><span>{t.n}</span>{on && <em class="mono">read-only</em>}
+        </li>
+      );
+    })
+  }
+</ul>
+<style>
+  .tree {
+    display: grid;
+    gap: 0.25rem;
+  }
+  li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.55rem;
+    padding-left: calc(0.55rem + var(--d) * 1rem);
+    border-radius: 7px;
+    color: var(--muted);
+    border: 1px solid transparent;
+    font-size: 0.95em;
+  }
+  .f {
+    width: 0.85rem;
+    height: 0.62rem;
+    border: 1.5px solid currentColor;
+    border-radius: 2px;
+    opacity: 0.8;
+  }
+  li.on {
+    color: var(--ink);
+    background: var(--a-1);
+    border-color: var(--a-3);
+    font-weight: 600;
+  }
+  li.on .f {
+    background: var(--blue);
+    border-color: var(--blue);
+    opacity: 1;
+  }
+  em {
+    margin-left: auto;
+    font-style: normal;
+    font-size: 0.74em;
+    letter-spacing: 0.04em;
+    color: var(--blue-text);
+    font-weight: 500;
+  }
+</style>

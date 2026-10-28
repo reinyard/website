@@ -32,12 +32,6 @@ import GithubIcon from './GithubIcon.astro';
       </div>
     </div>
   </div>
-
-  <ol class="wrap strip">
-    <li><i></i><b>Define</b><span>Pipelines live in Git</span></li>
-    <li><i></i><b>Isolate</b><span>Runs execute in sandboxes</span></li>
-    <li><i></i><b>Record</b><span>Every run is kept</span></li>
-  </ol>
 </section>
 
 <script>
@@ -51,10 +45,10 @@ import GithubIcon from './GithubIcon.astro';
 <style>
   .hero {
     position: relative;
-    min-height: min(100svh - 4.25rem, 58rem);
+    /* starts at the top edge, under the floating header; the strip below takes about 5rem of the first screen */
+    min-height: min(100svh - 5rem, 62rem);
     display: flex;
     flex-direction: column;
-    border-bottom: 1px solid var(--line);
   }
   .stage {
     position: relative;
@@ -62,7 +56,7 @@ import GithubIcon from './GithubIcon.astro';
     flex: 1;
     display: grid;
     align-items: center;
-    padding-block: clamp(3rem, 7vw, 6rem) clamp(2rem, 4vw, 3rem);
+    padding-block: calc(4.25rem + clamp(3rem, 7vw, 6rem)) clamp(2rem, 4vw, 3rem);
     overflow: clip;
   }
   canvas {
@@ -152,53 +146,10 @@ import GithubIcon from './GithubIcon.astro';
     }
   }
 
-  .strip {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    border-top: 1px solid var(--line);
-    background: var(--bg);
-  }
-  .strip li {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    column-gap: 0.9rem;
-    align-items: center;
-    padding: 1.3rem 1.25rem 1.4rem 0;
-  }
-  .strip li + li {
-    padding-left: 1.5rem;
-    border-left: 1px solid var(--line);
-  }
-  .strip i {
-    grid-row: span 2;
-    width: 0.55rem;
-    height: 0.55rem;
-    border-radius: 50%;
-    background: var(--blue);
-  }
-  .strip b {
-    font-weight: 600;
-    font-size: 1rem;
-    letter-spacing: -0.01em;
-  }
-  .strip span {
-    color: var(--muted);
-    font-size: 0.92rem;
-  }
   @media (max-width: 899px) {
     .stage {
       min-height: 46rem;
       align-items: start;
-    }
-  }
-  @media (max-width: 720px) {
-    .strip {
-      grid-template-columns: 1fr;
-    }
-    .strip li + li {
-      padding-left: 0;
-      border-left: 0;
-      border-top: 1px solid var(--line);
     }
   }
 </style>

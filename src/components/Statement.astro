@@ -1,135 +1,166 @@
 ---
-const qa = [
-  { q: 'Which version ran?', a: 'A commit.', d: 'Pipelines live in Git. Commits never change, and every run names the exact one that produced it.', icon: 'commit' },
-  { q: 'What could it touch?', a: 'Only what it was granted.', d: 'Access is per agent and per folder, read-only. Nothing outside the granted folders is in range.', icon: 'scope' },
-  { q: 'What happened?', a: 'A record of every run.', d: 'Logs, exit code and generated files are kept and tied to the version that ran.', icon: 'record' },
+// each answer is shown as the real thing, in the app's own panels, joined by one rule.
+import Card from './ui/Card.astro';
+import Commits from './ui/Commits.astro';
+import Folders from './ui/Folders.astro';
+import Executions from './ui/Executions.astro';
+
+const plates = [
+  { q: 'Which version ran?', a: 'A commit.', d: 'Pipelines live in Git. Commits never change, and every run names the exact one that produced it.' },
+  { q: 'What could it touch?', a: 'Only what it was granted.', d: 'Access is per agent and per folder, read-only. Nothing outside the granted folders is in range.' },
+  { q: 'What happened?', a: 'A record of every run.', d: 'Logs, exit code and generated files are kept and tied to the version that ran.' },
 ];
 ---
 
-<section class="statement">
+<section class="statement" data-live>
   <div class="wrap">
-    <p class="big reveal">
-      Agents are easy to build.
-      <span>Knowing what they did is the hard part.</span>
-    </p>
+    <div class="head">
+      <p class="lede">Agents are easy to build.</p>
+      <p class="lede dim">Knowing what they did is the hard part.</p>
+    </div>
 
-    <ul class="qa">
+    <div class="plates">
+      <div class="rule" aria-hidden="true">
+        <i></i><i></i><i></i>
+        <b></b>
+      </div>
       {
-        qa.map((x) => (
-          <li class="reveal">
-            <svg class={`ico ${x.icon}`} viewBox="0 0 48 48" fill="none" aria-hidden="true">
-              {x.icon === 'commit' && (
-                <>
-                  <path d="M8 34h32" class="rail" />
-                  <path d="M16 34c4 0 4-14 9-14h6c5 0 5 14 9 14" class="rail b" />
-                  <circle cx="8" cy="34" r="3.2" /><circle cx="16" cy="34" r="3.2" /><circle cx="25" cy="20" r="3.2" class="hot" /><circle cx="40" cy="34" r="3.2" class="hot" />
-                </>
+        plates.map((p, n) => (
+          <article class="plate">
+            <header>
+              <span class="hex mono">{n + 1}</span>
+              <span class="q mono">{p.q}</span>
+            </header>
+            <div class="screen" aria-hidden="true">
+              {n === 0 && (
+                <Card title="Commit ancestry" tag="immutable">
+                  <Commits commits={[{ hash: '7f3a2c1', msg: 'Tighten the classifier', tag: 'main', current: true }, { hash: '3eb4dd8', msg: 'Scope folder access to Finance' }, { hash: '9d20b6e', msg: 'Initial pipeline' }]} />
+                </Card>
               )}
-              {x.icon === 'scope' && (
-                <>
-                  <path d="M6 14a3 3 0 0 1 3-3h9l4 4h17a3 3 0 0 1 3 3v17a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3Z" class="rail b" />
-                  <path d="M24 21.5 29 24.4v5.2L24 32.5l-5-2.9v-5.2Z" class="hot fill" />
-                </>
+              {n === 1 && (
+                <Card title="Folder access" tag="read-only">
+                  <Folders granted={['Finance']} />
+                </Card>
               )}
-              {x.icon === 'record' && (
-                <>
-                  <rect x="9" y="9" width="30" height="30" rx="5" class="rail b" />
-                  <path d="M16 19h16M16 25h16M16 31h9" class="rail" />
-                  <circle cx="34" cy="31" r="3.2" class="hot fill" />
-                </>
+              {n === 2 && (
+                <Card title="Executions" tag="record">
+                  <Executions rows={[{ agent: 'Invoice reconciler', hash: '7f3a2c1', state: 'succeeded', note: '4 steps · all passed' }, { agent: 'Support triage', hash: '3eb4dd8', state: 'failed', note: 'failed at 03 Validate' }, { agent: 'Access review', hash: '9d20b6e', state: 'succeeded' }]} />
+                </Card>
               )}
-            </svg>
-            <p class="q mono">{x.q}</p>
-            <h3>{x.a}</h3>
-            <p class="d">{x.d}</p>
-          </li>
+            </div>
+            <h3>{p.a}</h3>
+            <p>{p.d}</p>
+          </article>
         ))
       }
-    </ul>
+    </div>
   </div>
 </section>
 
 <style>
   .statement {
-    padding-block: clamp(4.5rem, 10vw, 8rem);
+    padding-block: clamp(4rem, 9vw, 7rem);
+    font-size: 0.8rem;
   }
-  .big {
+  .head {
     max-width: 52rem;
-    font-size: clamp(1.7rem, 4vw, 3.1rem);
-    line-height: 1.12;
-    letter-spacing: -0.04em;
+  }
+  .lede {
+    font-size: clamp(1.8rem, 4.4vw, 3.4rem);
+    line-height: 1.08;
+    letter-spacing: -0.045em;
     font-weight: 600;
   }
-  .big span {
-    display: block;
-    margin-top: 0.2em;
+  .dim {
     color: var(--muted);
   }
-  .qa {
-    margin-top: clamp(2.5rem, 6vw, 4rem);
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-  }
-  .qa li {
+  .plates {
     position: relative;
-    padding: 1.7rem 1.6rem 1.8rem;
-    background: var(--bg-2);
-    border: 1px solid var(--line);
-    border-radius: var(--r-lg);
-    transition: border-color 0.25s, transform 0.4s var(--ease);
+    margin-top: clamp(3rem, 6vw, 4.5rem);
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1rem, 2.4vw, 2rem);
   }
-  .qa li:hover {
-    border-color: color-mix(in srgb, var(--blue) 45%, var(--line));
-    transform: translateY(-3px);
+  /* the rule that joins the three plates */
+  .rule {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0.95rem;
+    height: 1px;
+    background: var(--line);
   }
-  .ico {
-    width: 3.2rem;
-    height: 3.2rem;
-    stroke-width: 2;
+  .rule b {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 100%;
+    background: linear-gradient(90deg, var(--blue) 0 20%, transparent 20% 100%) 0 0 / 200% 100%;
+    animation: statement-run 6s linear infinite;
+    animation-play-state: paused;
   }
-  .rail {
-    stroke: var(--muted);
-    stroke-linecap: round;
-    stroke-linejoin: round;
+  .statement.is-live .rule b {
+    animation-play-state: running;
   }
-  .rail.b {
-    stroke: var(--ring);
+  @keyframes statement-run {
+    to {
+      background-position: -200% 0;
+    }
   }
-  .ico circle {
-    fill: var(--bg-2);
-    stroke: var(--ring);
+  .plate {
+    position: relative;
+    display: grid;
+    gap: 1rem;
+    align-content: start;
   }
-  .ico .hot {
-    stroke: var(--blue);
+  header {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    position: relative;
+    z-index: 1;
   }
-  .ico circle.hot {
-    fill: var(--blue);
-  }
-  .ico .fill {
-    fill: var(--blue);
-    stroke: var(--blue);
-    stroke-linejoin: round;
+  .hex {
+    display: grid;
+    place-items: center;
+    width: 2rem;
+    height: 2.3rem;
+    background: var(--accent);
+    color: var(--on-accent);
+    font-size: 0.8rem;
+    font-weight: 600;
+    clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
   }
   .q {
-    margin-top: 1.5rem;
-    font-size: 0.74rem;
+    padding: 0.2rem 0.6rem;
+    background: var(--bg);
+    font-size: 0.72rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--muted);
   }
+  .screen {
+    padding-top: 0.4rem;
+    transition: transform 0.5s var(--ease);
+  }
+  .plate:hover .screen {
+    transform: translateY(-4px);
+  }
   h3 {
-    margin-top: 0.5rem;
-    font-size: 1.4rem;
+    font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+    letter-spacing: -0.04em;
+    line-height: 1.1;
   }
-  .d {
-    margin-top: 0.7rem;
+  .plate > p {
     color: var(--muted);
-    font-size: 0.97rem;
+    font-size: 1rem;
   }
-  @media (max-width: 860px) {
-    .qa {
+  @media (max-width: 900px) {
+    .plates {
       grid-template-columns: 1fr;
+      gap: 2.6rem;
+    }
+    .rule {
+      display: none;
     }
   }
 </style>

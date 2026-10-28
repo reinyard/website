@@ -10,8 +10,10 @@ interface Props {
   description: string;
   path: string;
   noindex?: boolean;
+  /** the page starts with its own full-bleed section (the home page hero), which runs under the floating header */
+  overlay?: boolean;
 }
-const { title, description, path, noindex = false } = Astro.props;
+const { title, description, path, noindex = false, overlay = false } = Astro.props;
 const url = new URL(path, 'https://reinyard.com').href;
 ---
 
@@ -48,9 +50,14 @@ const url = new URL(path, 'https://reinyard.com').href;
   </head>
   <body>
     <Nav />
-    <main id="main">
+    <main id="main" class:list={{ pad: !overlay }}>
       <slot />
     </main>
     <Footer />
+    <script>
+      // Animated sections run only while they are on screen (marked data-live), so a long page stays light.
+      const io = new IntersectionObserver((entries) => entries.forEach((e) => e.target.classList.toggle('is-live', e.isIntersecting)), { rootMargin: '80px' });
+      document.querySelectorAll('[data-live]').forEach((el) => io.observe(el));
+    </script>
   </body>
 </html>

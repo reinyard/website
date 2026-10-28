@@ -1,0 +1,76 @@
+---
+// Commit ancestry. Commits never change; editing saves a new one.
+interface Commit { hash: string; msg: string; tag?: string; current?: boolean }
+interface Props { commits: Commit[]; }
+const { commits } = Astro.props;
+---
+<ul class="log">
+  {
+    commits.map((c) => (
+      <li class:list={{ cur: c.current }}>
+        <i class="dot"></i>
+        <span class="h mono">{c.hash}</span>
+        <span class="m">{c.msg}</span>
+        {c.tag && <span class="tg mono">{c.tag}</span>}
+      </li>
+    ))
+  }
+</ul>
+<style>
+  .log {
+    position: relative;
+    display: grid;
+    gap: 0.2rem;
+  }
+  .log::before {
+    content: '';
+    position: absolute;
+    left: 0.33rem;
+    top: 0.8rem;
+    bottom: 0.8rem;
+    width: 1.5px;
+    background: var(--line);
+  }
+  li {
+    position: relative;
+    display: grid;
+    grid-template-columns: 0.8rem auto 1fr auto;
+    gap: 0.55rem;
+    align-items: center;
+    padding: 0.38rem 0.3rem;
+    border-radius: 6px;
+    font-size: 0.95em;
+  }
+  .dot {
+    width: 0.62rem;
+    height: 0.62rem;
+    border-radius: 50%;
+    background: var(--bg-2);
+    border: 1.5px solid var(--muted);
+    z-index: 1;
+  }
+  .cur {
+    background: var(--a-1);
+  }
+  .cur .dot {
+    background: var(--blue);
+    border-color: var(--blue);
+  }
+  .h {
+    color: var(--blue-text);
+    font-size: 0.85em;
+  }
+  .m {
+    color: var(--ink-2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .tg {
+    font-size: 0.72em;
+    color: var(--muted);
+    padding: 0.05rem 0.4rem;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+  }
+</style>
