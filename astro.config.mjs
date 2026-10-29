@@ -10,13 +10,26 @@ export default defineConfig({
     starlight({
       title: 'Reinyard',
       description: 'Documentation for Reinyard: build, version and run agents in isolated sandboxes.',
+      titleDelimiter: '·',
       favicon: '/icon.svg',
+      // the same browser-chrome colors as the rest of the site, so the address bar does not change color inside the docs
       head: [
         { tag: 'link', attrs: { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' } },
+        { tag: 'meta', attrs: { name: 'theme-color', content: '#f0f4f7', media: '(prefers-color-scheme: light)' } },
+        { tag: 'meta', attrs: { name: 'theme-color', content: '#282f34', media: '(prefers-color-scheme: dark)' } },
       ],
-      customCss: ['./src/styles/fonts.css', './src/styles/starlight.css'],
+      customCss: ['./src/styles/starlight.css'],
+      // Code blocks: the two themes are chosen for their backgrounds, which sit close to the site's page and panel colors, and
+      // their syntax colors stay legible against them (Expressive Code checks contrast against the theme's own background).
+      expressiveCode: {
+        themes: ['github-light', 'github-dark-dimmed'],
+        styleOverrides: { borderRadius: '12px', codeFontFamily: 'var(--mono)', uiFontFamily: 'var(--sans)', codeFontSize: '0.86rem' },
+      },
       components: {
+        Head: './src/components/DocsHead.astro',
         Header: './src/components/DocsHeader.astro',
+        Sidebar: './src/components/DocsSidebar.astro',
+        PageTitle: './src/components/DocsPageTitle.astro',
         Footer: './src/components/DocsFooter.astro',
         ThemeSelect: './src/components/ThemeSwitch.astro',
         SocialIcons: './src/components/DocsSocial.astro',

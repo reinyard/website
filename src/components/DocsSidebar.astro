@@ -1,0 +1,46 @@
+---
+// Wraps Starlight's sidebar. On phones the pill hides the site's links, so the drawer carries them at the top, above the docs
+// navigation. Starlight's own sidebar (with its persisted open/closed state) is rendered unchanged below.
+import Default from '@astrojs/starlight/components/Sidebar.astro';
+import GithubIcon from './GithubIcon.astro';
+---
+
+<nav class="site" aria-label="Site">
+  <a href="/">Home</a>
+  <a href="/#pricing">Pricing</a>
+  <a href="/about/">About</a>
+  <a href="https://github.com/reinyard" rel="noopener"><GithubIcon size={16} />GitHub</a>
+</nav>
+<Default {...Astro.props}><slot /></Default>
+
+<style>
+  .site {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    padding-bottom: 1rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .site a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.85rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--ink-2);
+    font-size: 0.92rem;
+    font-weight: 500;
+    text-decoration: none;
+  }
+  .site a:hover {
+    color: var(--ink);
+    background: var(--bg-3);
+  }
+  @media (min-width: 50rem) {
+    .site {
+      display: none;
+    }
+  }
+</style>
