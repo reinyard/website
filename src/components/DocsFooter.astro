@@ -9,12 +9,61 @@ import Footer from './Footer.astro';
 <Footer docs />
 
 <script>
-  // Wrap each table in a scroll container: a wide table then scrolls inside the page instead of stretching it.
+  // Wrap each table in a scroll container: a wide table then scrolls inside the page instead of stretching it. A container that
+  // really scrolls is made keyboard-focusable, so it can be scrolled without a mouse.
+  const wraps: HTMLElement[] = [];
   document.querySelectorAll<HTMLTableElement>('.sl-markdown-content table').forEach((t) => {
     if (t.parentElement?.classList.contains('table-wrap')) return;
     const wrap = document.createElement('div');
     wrap.className = 'table-wrap';
     t.replaceWith(wrap);
     wrap.append(t);
+    wraps.push(wrap);
   });
+  const mark = () =>
+    wraps.forEach((w) => {
+      const scrolls = w.scrollWidth > w.clientWidth + 1;
+      if (scrolls) {
+        w.tabIndex = 0;
+        w.setAttribute('role', 'group');
+        w.setAttribute('aria-label', 'Scrollable table');
+      } else {
+        w.removeAttribute('tabindex');
+        w.removeAttribute('role');
+        w.removeAttribute('aria-label');
+      }
+    });
+  if (wraps.length) {
+    mark();
+    new ResizeObserver(mark).observe(document.body);
+  }
+
+  // Expressive Code makes a code block that scrolls sideways keyboard-focusable and marks it as a region, but gives the region no
+  // name; give each one a unique name, so assistive technology can tell them apart.
+  const pres = [...document.querySelectorAll<HTMLElement>('.expressive-code pre')];
+  const name = () =>
+    pres.forEach((pre, i) => {
+      if (pre.getAttribute('role') === 'region' && !pre.hasAttribute('aria-label')) {
+        pre.setAttribute('aria-label', `${pre.dataset.language ?? 'Code'} code, block ${i + 1}`);
+      }
+    });
+  if (pres.length) {
+    name();
+    const mo = new MutationObserver(name);
+    pres.forEach((pre) => mo.observe(pre, { attributes: true, attributeFilter: ['role'] }));
+  }
+
+  // Two controls the Markdown pipeline and the search library render without a name: the checkboxes of task lists, and the search
+  // field. Name them from what is next to them.
+  document.querySelectorAll<HTMLInputElement>('.task-list-item > input[type="checkbox"]').forEach((box) => {
+    const text = box.parentElement?.textContent?.trim();
+    if (text) box.setAttribute('aria-label', text);
+  });
+  const nameSearch = () => {
+    const input = document.querySelector<HTMLInputElement>('#starlight__search input');
+    if (input && !input.hasAttribute('aria-label')) input.setAttribute('aria-label', 'Search the documentation');
+  };
+  nameSearch();
+  const search = document.getElementById('starlight__search');
+  if (search) new MutationObserver(nameSearch).observe(search, { childList: true, subtree: true });
 </script>

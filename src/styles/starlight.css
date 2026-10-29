@@ -489,6 +489,12 @@ mobile-starlight-toc .dropdown {
 .sl-markdown-content .task-list-item input[type='checkbox'] {
   accent-color: var(--accent);
 }
+.sl-markdown-content .data-footnote-backref {
+  /* the return arrow is text here, not the colored emoji some systems substitute */
+  font-family: var(--sans);
+  font-variant-emoji: text;
+  text-decoration: none;
+}
 .sl-markdown-content .footnotes {
   margin-top: 3rem;
   padding-top: 1rem;
@@ -746,8 +752,16 @@ starlight-file-tree {
   padding: 1.1rem 1.2rem;
 }
 starlight-file-tree .highlight {
+  background: var(--a-2);
   color: var(--blue-text);
   font-weight: 600;
+  border-radius: 6px;
+  padding-inline: 0.25rem;
+}
+starlight-file-tree .highlight strong,
+starlight-file-tree .highlight .tree-icon {
+  color: inherit;
+  fill: currentColor;
 }
 starlight-file-tree ul {
   border-color: var(--line);
@@ -912,12 +926,18 @@ site-search dialog {
   font-weight: 600;
   letter-spacing: -0.01em;
 }
-.pagination-links span {
+.pagination-links span:not(.link-title):not(:has(.link-title)) {
   font-family: var(--mono);
   font-size: 0.7rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted);
+}
+.pagination-links .link-title {
+  font-family: var(--sans);
+  font-size: 1rem;
+  text-transform: none;
+  letter-spacing: -0.01em;
 }
 footer .meta a {
   color: var(--blue-text);

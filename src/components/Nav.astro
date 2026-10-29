@@ -9,6 +9,8 @@ interface Props {
   docs?: boolean;
 }
 const { docs = false } = Astro.props;
+// inside the docs, Starlight's own <header> is the page's banner, so the pill is a plain element there
+const Pill = docs ? 'div' : 'header';
 const links = [
   { href: '/docs/', label: 'Docs' },
   { href: '/#pricing', label: 'Pricing' },
@@ -22,7 +24,7 @@ const current = (href: string) => (href === '/docs/' ? path.startsWith('/docs') 
 
 <div class:list={['nav', { docs }]}>
   {!docs && <a class="skip" href="#main">Skip to content</a>}
-  <header class="pill">
+  <Pill class="pill">
     <a class="brand" href="/" aria-label="reinyard home"><Mark size={28} /><span>reinyard.</span></a>
     <nav class="links" aria-label="Primary">
       {links.map((l) => <a href={l.href} aria-current={current(l.href) ? 'page' : undefined}>{l.label}</a>)}
@@ -45,7 +47,7 @@ const current = (href: string) => (href === '/docs/' ? path.startsWith('/docs') 
         )
       }
     </div>
-  </header>
+  </Pill>
 </div>
 
 <script>
