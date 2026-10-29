@@ -434,6 +434,11 @@ mobile-starlight-toc .dropdown {
 .sl-markdown-content figure img {
   border-radius: var(--r-lg);
 }
+/* Starlight makes every svg in prose a block; an icon inside a sentence stays inline */
+.sl-markdown-content :is(p, li, td, th, summary, .badge) > svg {
+  display: inline-block;
+  vertical-align: -0.2em;
+}
 .sl-markdown-content figcaption {
   margin-top: 0.6rem;
   font-size: 0.88rem;
@@ -782,24 +787,24 @@ starlight-file-tree .empty {
   color: var(--muted);
 }
 
-/* details in prose */
-.sl-markdown-content details {
+/* details in prose (not the file tree's folders, which are details elements too) */
+.sl-markdown-content details:not(starlight-file-tree details) {
   border: 1px solid var(--line);
   border-radius: var(--r-lg);
   background: var(--bg-2);
   padding: 0.85rem 1.1rem;
 }
-.sl-markdown-content details > summary {
+.sl-markdown-content details:not(starlight-file-tree details) > summary {
   cursor: pointer;
   font-weight: 600;
   color: var(--ink);
 }
-.sl-markdown-content details[open] > summary {
+.sl-markdown-content details[open]:not(starlight-file-tree details) > summary {
   margin-bottom: 0.7rem;
   padding-bottom: 0.7rem;
   border-bottom: 1px solid var(--line);
 }
-.sl-markdown-content details > :last-child {
+.sl-markdown-content details:not(starlight-file-tree details) > :last-child {
   margin-bottom: 0;
 }
 
@@ -962,6 +967,8 @@ footer .meta a {
   background: var(--accent);
   color: var(--on-accent);
   font-size: 0.92rem;
+  line-height: 1.45;
+  padding: 0.65rem var(--sl-content-pad-x);
 }
 .sl-banner a {
   color: inherit;
