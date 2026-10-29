@@ -239,8 +239,9 @@ header.header :where(.pill) {
 
 /* The pill is the header on every width; Starlight's round menu button is moved inside its right end on phones. */
 .sl-menu-button {
-  top: calc(0.75rem + (var(--sl-nav-height) - 0.75rem - 0.9rem - var(--sl-menu-button-size)) / 2) !important;
-  inset-inline-end: calc(var(--gutter) + 0.55rem) !important;
+  /* exactly where the site's own menu button is: inside the pill, past its 0.75rem offset, 1px border and padding */
+  top: calc(0.75rem + 1px + 0.45rem) !important;
+  inset-inline-end: calc(var(--gutter) + 1px + 0.55rem) !important;
   width: var(--sl-menu-button-size);
   height: var(--sl-menu-button-size);
   padding: 0.55rem !important;

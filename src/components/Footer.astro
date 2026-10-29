@@ -2,11 +2,6 @@
 // the footer as the page's table of contents. Large numbered rows, hairlines between, and a plain line
 // about where the product stands. Reads like the end of a document, not a link dump.
 import Wordmark from './Wordmark.astro';
-// `docs` is the variant used at the bottom of the documentation: the same footer, set in the width of the page content.
-interface Props {
-  docs?: boolean;
-}
-const { docs = false } = Astro.props;
 const items = [
   { n: '01', t: 'Pricing', href: '/#pricing' },
   { n: '02', t: 'Documentation', href: '/docs/' },
@@ -18,8 +13,8 @@ const items = [
 ];
 ---
 
-<footer class:list={['footer', { docs }]}>
-  <div class:list={[docs ? 'in' : 'wrap', 'main']}>
+<footer class="footer">
+  <div class="wrap main">
     <div class="who">
       <Wordmark />
       <p class="line">A controlled place for agents to work.</p>
@@ -39,25 +34,13 @@ const items = [
       }
     </ol>
   </div>
-  <div class:list={[docs ? 'in' : 'wrap', 'legal']}>
+  <div class="wrap legal">
     <span>© 2026 Reinyard</span>
     <a href="mailto:security@reinyard.com">Report a vulnerability</a>
   </div>
 </footer>
 
 <style>
-  /* like the pill, the footer does not rely on the site's global reset */
-  .footer :is(a) {
-    text-decoration: none;
-  }
-  .footer :is(ol, ul) {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-  .footer :is(p, h2, h3) {
-    margin: 0;
-  }
   .footer {
     background: var(--bg);
     padding-top: clamp(3rem, 7vw, 5rem);
@@ -156,29 +139,6 @@ const items = [
   }
   .legal a:hover {
     color: var(--blue-text);
-  }
-  .docs {
-    margin-top: 3.5rem;
-    padding-top: 2.4rem;
-    border-top: 1px solid var(--line);
-  }
-  .docs .main {
-    grid-template-columns: 1fr;
-    gap: 1.6rem;
-  }
-  .docs .line {
-    font-size: 1.3rem;
-    max-width: none;
-  }
-  .docs .t {
-    font-size: 1.02rem;
-  }
-  .docs ol a {
-    padding-block: 0.8rem;
-  }
-  .docs .legal {
-    margin-top: 1.6rem;
-    padding-bottom: 0;
   }
   @media (max-width: 860px) {
     .main {

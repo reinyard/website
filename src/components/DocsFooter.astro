@@ -1,12 +1,44 @@
 ---
-// Starlight's footer (edit link, last updated date, previous and next links), then the site's own footer, set in the width
-// of the page content.
+// Starlight's footer (edit link, last updated date, previous and next links), then one thin legal line, the same row that closes
+// the site's own footer. The docs do not repeat the site's navigation: the header and the sidebar already carry it.
 import Default from '@astrojs/starlight/components/Footer.astro';
-import Footer from './Footer.astro';
 ---
 
 <Default><slot /></Default>
-<Footer docs />
+<div class="legal">
+  <span>© 2026 Reinyard</span>
+  <nav aria-label="Legal">
+    <a href="/licenses/">Licenses</a>
+    <a href="mailto:security@reinyard.com">Report a vulnerability</a>
+  </nav>
+</div>
+
+<style>
+  .legal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.4rem 1.4rem;
+    margin-top: 2.5rem;
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.84rem;
+    color: var(--muted);
+  }
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.4rem;
+  }
+  a {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  a:hover {
+    color: var(--blue-text);
+  }
+</style>
 
 <script>
   // Wrap each table in a scroll container: a wide table then scrolls inside the page instead of stretching it. A container that
