@@ -26,6 +26,7 @@ export default defineConfig({
         styleOverrides: { borderRadius: '12px', codeFontFamily: 'var(--mono)', uiFontFamily: 'var(--sans)', codeFontSize: '0.86rem' },
       },
       components: {
+        Head: './src/components/DocsHead.astro',
         Header: './src/components/DocsHeader.astro',
         Sidebar: './src/components/DocsSidebar.astro',
         PageTitle: './src/components/DocsPageTitle.astro',

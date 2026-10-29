@@ -297,11 +297,22 @@ mobile-starlight-toc nav {
   border-bottom: 1px solid var(--line);
 }
 mobile-starlight-toc summary {
+  background: transparent;
+  border: 0;
+  font-size: 0.88rem;
+}
+mobile-starlight-toc .toggle {
+  border: 1px solid var(--line);
   border-radius: var(--r);
   background: var(--bg-2);
-  border: 1px solid var(--line);
   color: var(--ink-2);
-  font-size: 0.88rem;
+}
+mobile-starlight-toc .toggle:hover {
+  background: var(--bg-3);
+}
+mobile-starlight-toc .display-current {
+  color: var(--ink);
+  font-weight: 500;
 }
 mobile-starlight-toc .dropdown {
   background: var(--bg-2);
@@ -861,9 +872,14 @@ starlight-file-tree .empty {
     font-size: 1.15rem;
   }
 }
-@media (min-width: 50rem) and (max-width: 67.5rem) {
+/* between the docs' two layouts the pill is tight: a shorter field, and no shortcut hint */
+@media (min-width: 50rem) and (max-width: 74rem) {
   .search button[data-open-modal] {
-    width: 9rem;
+    width: 7.5rem;
+    padding-inline-end: 0.85rem;
+  }
+  .search button[data-open-modal] kbd {
+    display: none;
   }
 }
 #starlight__search {

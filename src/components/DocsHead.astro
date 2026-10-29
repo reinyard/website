@@ -1,0 +1,10 @@
+---
+// Starlight's <head> tags, plus the same two font preloads the rest of the site has, so the docs paint their text as fast.
+import Default from '@astrojs/starlight/components/Head.astro';
+import sans400 from '../styles/fonts/ibm-plex-sans-latin-400-normal.woff2?url';
+import sans600 from '../styles/fonts/ibm-plex-sans-latin-600-normal.woff2?url';
+---
+
+<Default><slot /></Default>
+<link rel="preload" href={sans400} as="font" type="font/woff2" crossorigin />
+<link rel="preload" href={sans600} as="font" type="font/woff2" crossorigin />
