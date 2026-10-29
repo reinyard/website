@@ -50,20 +50,6 @@ export default defineConfig({
           ],
         },
         { label: 'Operate', items: ['docs/self-hosting', 'docs/security', 'docs/cloud'] },
-        // TEMPORARY: the style-test pages. Remove this group and src/content/docs/docs/style-test/ before any PR.
-        {
-          label: 'Style test',
-          collapsed: true,
-          items: [
-            'docs/style-test',
-            'docs/style-test/components',
-            'docs/style-test/code',
-            'docs/style-test/structure',
-            'docs/style-test/splash',
-            { label: 'A nested group', collapsed: false, items: ['docs/style-test/nested/page', { label: 'An external link', link: 'https://github.com/reinyard', attrs: { target: '_blank' } }] },
-            { label: 'A link with a badge', link: '/docs/', badge: { text: 'New', variant: 'success' } },
-          ],
-        },
       ],
     }),
   ],
