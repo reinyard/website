@@ -649,6 +649,14 @@ mobile-starlight-toc .dropdown {
 .card-grid {
   gap: 1rem;
 }
+/* Starlight's `stagger` option offsets every second card. The site keeps everything on one grid, so the option is neutralized:
+   a grid marked stagger renders exactly like any other. */
+.card-grid.stagger {
+  padding-bottom: 0;
+}
+.card-grid.stagger > * {
+  transform: none;
+}
 
 /* link cards and buttons */
 .sl-link-card {
