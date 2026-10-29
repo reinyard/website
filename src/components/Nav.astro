@@ -3,6 +3,12 @@
 import Mark from './Mark.astro';
 import ThemeSwitch from './ThemeSwitch.astro';
 import GithubIcon from './GithubIcon.astro';
+// `docs` is the variant used inside the documentation: the same pill, with the docs search in it, and without the pill's own
+// menu or skip link, because the docs have a menu drawer and a skip link of their own.
+interface Props {
+  docs?: boolean;
+}
+const { docs = false } = Astro.props;
 const links = [
   { href: '/docs/', label: 'Docs' },
   { href: '/#pricing', label: 'Pricing' },
@@ -14,25 +20,30 @@ const path = Astro.url.pathname;
 const current = (href: string) => (href === '/docs/' ? path.startsWith('/docs') : href === '/about/' ? path.startsWith('/about') : false);
 ---
 
-<div class="nav">
-  <a class="skip" href="#main">Skip to content</a>
+<div class:list={['nav', { docs }]}>
+  {!docs && <a class="skip" href="#main">Skip to content</a>}
   <header class="pill">
     <a class="brand" href="/" aria-label="reinyard home"><Mark size={28} /><span>reinyard.</span></a>
     <nav class="links" aria-label="Primary">
       {links.map((l) => <a href={l.href} aria-current={current(l.href) ? 'page' : undefined}>{l.label}</a>)}
     </nav>
     <div class="actions">
+      {docs && <div class="search"><slot name="search" /></div>}
       <a class="gh" href="https://github.com/reinyard" rel="noopener" aria-label="Reinyard on GitHub" title="GitHub"><GithubIcon size={19} /></a>
       <ThemeSwitch />
       <button class="login" type="button" disabled aria-disabled="true" title="The managed cloud is coming soon"><span>Log in</span><em>Soon</em></button>
-      <details class="menu">
-        <summary aria-label="Menu"><span></span><span></span></summary>
-        <div class="sheet">
-          {links.map((l) => <a href={l.href} aria-current={current(l.href) ? 'page' : undefined}>{l.label}</a>)}
-          <a class="gh-row" href="https://github.com/reinyard" rel="noopener"><GithubIcon size={18} />GitHub</a>
-          <div class="login-m" aria-disabled="true">Log in / Sign up <em>Coming soon</em></div>
-        </div>
-      </details>
+      {
+        !docs && (
+          <details class="menu">
+            <summary aria-label="Menu"><span></span><span></span></summary>
+            <div class="sheet">
+              {links.map((l) => <a href={l.href} aria-current={current(l.href) ? 'page' : undefined}>{l.label}</a>)}
+              <a class="gh-row" href="https://github.com/reinyard" rel="noopener"><GithubIcon size={18} />GitHub</a>
+              <div class="login-m" aria-disabled="true">Log in / Sign up <em>Coming soon</em></div>
+            </div>
+          </details>
+        )
+      }
     </div>
   </header>
 </div>
@@ -88,6 +99,15 @@ const current = (href: string) => (href === '/docs/' ? path.startsWith('/docs') 
   .nav > * {
     pointer-events: auto;
   }
+  /* the pill does not rely on the site's global reset, so it looks the same inside the docs */
+  .nav a {
+    text-decoration: none;
+  }
+  .nav :is(ul, ol) {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
   .pill {
     position: relative;
     max-width: 62rem;
@@ -99,8 +119,10 @@ const current = (href: string) => (href === '/docs/' ? path.startsWith('/docs') 
     border: 1px solid var(--line);
     border-radius: 999px;
     background: color-mix(in srgb, var(--bg-2) 78%, transparent);
-    backdrop-filter: blur(14px) saturate(1.4);
+    /* prefixed first: the minifier keeps only the last of a prefixed and an unprefixed pair, and Chrome and Firefox need the
+       unprefixed one */
     -webkit-backdrop-filter: blur(14px) saturate(1.4);
+    backdrop-filter: blur(14px) saturate(1.4);
     box-shadow: 0 16px 40px -24px color-mix(in srgb, var(--ink) 55%, transparent);
   }
   .brand {
@@ -237,13 +259,38 @@ const current = (href: string) => (href === '/docs/' ? path.startsWith('/docs') 
     padding-right: 0;
   }
   @media (max-width: 860px) {
-    .links,
-    .actions > .gh,
-    .login {
+    .nav:not(.docs) .links,
+    .nav:not(.docs) .actions > .gh,
+    .nav:not(.docs) .login {
       display: none;
     }
     .menu {
       display: block;
+    }
+  }
+
+  /* docs variant: the docs search sits in the pill. The breakpoints are Starlight's (50rem), so the pill and the docs layout
+     change at the same width. */
+  .search {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+  }
+  @media (max-width: 799.98px) {
+    .docs .links,
+    .docs .actions > .gh,
+    .docs .actions > :global(.theme-switch),
+    .docs .login {
+      display: none;
+    }
+    /* room for the drawer button, which Starlight places over the right end of the pill */
+    .docs .pill {
+      padding-right: 3.5rem;
+    }
+  }
+  @media (min-width: 800px) and (max-width: 1080px) {
+    .docs .login {
+      display: none;
     }
   }
 </style>

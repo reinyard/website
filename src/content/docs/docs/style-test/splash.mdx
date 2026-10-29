@@ -1,0 +1,32 @@
+---
+title: Style test, splash
+description: A splash page with a hero. Temporary page.
+template: splash
+pagefind: false
+hero:
+  tagline: A page built on the splash template, to check the hero, its buttons and the full-width layout.
+  actions:
+    - text: Primary action
+      link: /docs/
+      icon: right-arrow
+    - text: Secondary action
+      link: /docs/concepts/
+      variant: secondary
+    - text: Minimal action
+      link: https://github.com/reinyard
+      variant: minimal
+head:
+  - tag: meta
+    attrs:
+      name: robots
+      content: noindex
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+<CardGrid stagger>
+  <Card title="One" icon="rocket">Below the hero, a grid of cards.</Card>
+  <Card title="Two" icon="star">The splash template has no sidebar and no table of contents.</Card>
+</CardGrid>
+
+Plain text under the cards.

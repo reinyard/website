@@ -1,0 +1,176 @@
+---
+title: Style test, components
+description: Every Starlight component, to check the docs against the rest of the site. Temporary page.
+pagefind: false
+sidebar:
+  label: Components
+  order: 2
+head:
+  - tag: meta
+    attrs:
+      name: robots
+      content: noindex
+---
+
+import { Aside, Badge, Card, CardGrid, Code, FileTree, Icon, LinkButton, LinkCard, Steps, TabItem, Tabs } from '@astrojs/starlight/components';
+
+Temporary page. Every component below should look like it was designed for this site.
+
+## Asides
+
+:::note
+A note. It carries one sentence and a [link](/docs/).
+:::
+
+:::tip
+A tip, with `inline code` and **strong text**.
+:::
+
+:::caution
+A caution that is long enough to wrap onto a second line, so that the padding, the icon and the line height can all be judged at once.
+:::
+
+:::danger
+A danger notice.
+:::
+
+:::note[A note with a custom title]
+Body text of a note that has its own title.
+:::
+
+:::tip[A tip with a list and code]
+- First point
+- Second point
+
+```sh
+reinyard --version
+```
+:::
+
+<Aside type="note" title="The component form">
+The `Aside` component renders the same as the directive form.
+</Aside>
+
+## Badges
+
+<Badge text="Default" /> <Badge text="Note" variant="note" /> <Badge text="Success" variant="success" /> <Badge text="Tip" variant="tip" /> <Badge text="Caution" variant="caution" /> <Badge text="Danger" variant="danger" /> <Badge text="Small" size="small" /> <Badge text="Medium" size="medium" variant="tip" /> <Badge text="Large" size="large" variant="note" />
+
+## Cards
+
+<CardGrid>
+  <Card title="Versioned" icon="seti:git">
+    Pipelines live in Git, with commits, branches and merges.
+  </Card>
+  <Card title="Isolated" icon="rocket">
+    Every run executes in its own sandbox.
+  </Card>
+  <Card title="Recorded" icon="document">
+    Logs, exit codes and generated files are kept.
+  </Card>
+  <Card title="Scoped" icon="setting">
+    Agents read only what they have been granted.
+  </Card>
+</CardGrid>
+
+<CardGrid stagger>
+  <Card title="Staggered one" icon="star">
+    A staggered grid offsets its second column.
+  </Card>
+  <Card title="Staggered two" icon="heart">
+    Same card, second column.
+  </Card>
+</CardGrid>
+
+## Link cards and buttons
+
+<LinkCard title="Read the introduction" description="What Reinyard is and how the documentation is organized." href="/docs/" />
+<LinkCard title="An external link card" description="Opens GitHub." href="https://github.com/reinyard" />
+
+<CardGrid>
+  <LinkCard title="Concepts" description="The model in five pages." href="/docs/concepts/" />
+  <LinkCard title="Security model" href="/docs/security/" />
+</CardGrid>
+
+<LinkButton href="/docs/">Primary button</LinkButton> <LinkButton href="/docs/" variant="secondary">Secondary button</LinkButton> <LinkButton href="/docs/" variant="minimal">Minimal button</LinkButton> <LinkButton href="/docs/" icon="right-arrow" iconPlacement="end">With icon</LinkButton>
+
+## Steps
+
+<Steps>
+
+1. Define the pipeline
+
+   Write it once and commit it.
+
+   ```sh
+   git commit -m "Initial pipeline"
+   ```
+
+2. Run it
+
+   A sandbox is created for the run.
+
+3. Read the record
+
+   Logs, exit code and files are kept.
+
+</Steps>
+
+## Tabs
+
+<Tabs>
+  <TabItem label="On-premises" icon="seti:go">
+    The platform runs on infrastructure you control.
+  </TabItem>
+  <TabItem label="Cloud">
+    A managed cloud is planned.
+  </TabItem>
+  <TabItem label="Hybrid">
+    Both, for Enterprise.
+  </TabItem>
+</Tabs>
+
+Synced tabs, so choosing a package manager on one set changes the other:
+
+<Tabs syncKey="pkg">
+  <TabItem label="bun">
+    ```sh
+    bun add reinyard
+    ```
+  </TabItem>
+  <TabItem label="npm">
+    ```sh
+    npm install reinyard
+    ```
+  </TabItem>
+</Tabs>
+
+<Tabs syncKey="pkg">
+  <TabItem label="bun">Run `bun run dev`.</TabItem>
+  <TabItem label="npm">Run `npm run dev`.</TabItem>
+</Tabs>
+
+## File tree
+
+<FileTree>
+
+- reinyard/
+  - pipelines/
+    - invoice-reconciler.yaml
+    - support-triage.yaml
+  - **config.yaml** a highlighted file
+  - README.md
+  - src/
+    - main.go
+    - …
+  - node_modules/ (collapsed)
+- LICENSE
+
+</FileTree>
+
+## Icons
+
+<Icon name="star" /> <Icon name="rocket" size="2rem" /> <Icon name="github" size="2rem" color="var(--sl-color-accent)" /> <Icon name="information" /> <Icon name="warning" /> <Icon name="error" /> <Icon name="approve-check" />
+
+## The Code component
+
+<Code code={`const run = await reinyard.run('invoice-reconciler');\nconsole.log(run.record);`} lang="ts" title="run.ts" mark={['run.record']} />

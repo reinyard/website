@@ -1,0 +1,31 @@
+---
+// The page title, with the name of its sidebar section above it as a small mono label: the same eyebrow the site's own pages
+// use over their headings.
+const { entry, sidebar } = Astro.locals.starlightRoute;
+type Entry = { type: 'link'; isCurrent: boolean } | { type: 'group'; label: string; entries: Entry[] };
+const holds = (e: Entry): boolean => (e.type === 'link' ? e.isCurrent : e.entries.some(holds));
+const section = (sidebar as Entry[]).find((e) => e.type === 'group' && holds(e)) as { label: string } | undefined;
+---
+
+{section && <p class="eyebrow mono">{section.label}</p>}
+<!-- Starlight's table of contents and mobile TOC look the title up by this id -->
+<h1 id="_top">{entry.data.title}</h1>
+
+<style>
+  .eyebrow {
+    margin: 0 0 0.9rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--blue-text);
+  }
+  h1 {
+    margin: 0;
+    font-size: clamp(2rem, 4.4vw, 2.7rem);
+    line-height: 1.06;
+    letter-spacing: -0.045em;
+    font-weight: 600;
+    color: var(--ink);
+    text-wrap: balance;
+  }
+</style>

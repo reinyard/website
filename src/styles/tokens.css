@@ -18,6 +18,12 @@
   --focus: #18578b;
   --red: #c64739; /* failed runs only */
   --red-text: #b73a2d; /* the same red as text, 4.5:1 on its tinted badge */
+  /* the docs' two other signals, kept inside the palette: a teal for tips and success, an amber for cautions. Each has a fill
+     color and a text color that holds 4.5:1 on its tinted background. */
+  --tip: #1f8a78;
+  --tip-text: #0b6455;
+  --warn: #c07f00;
+  --warn-text: #7a5000;
   --ring: #45577a; /* logo brackets */
   --core: #0a9ad0; /* logo center */
   --cell: rgba(61, 103, 138, 0.2); /* hex field outlines */
@@ -56,6 +62,10 @@
   --focus: #97ccf7;
   --red: #d37369;
   --red-text: #f2aaa2;
+  --tip: #4db8a4;
+  --tip-text: #8fe0cf;
+  --warn: #d9a441;
+  --warn-text: #f2c46d;
   --ring: #9aa9c7;
   --core: #5cc2f2;
   --cell: rgba(189, 197, 204, 0.16);
@@ -85,6 +95,10 @@
     --focus: #97ccf7;
     --red: #d37369;
     --red-text: #f2aaa2;
+    --tip: #4db8a4;
+    --tip-text: #8fe0cf;
+    --warn: #d9a441;
+    --warn-text: #f2c46d;
     --ring: #9aa9c7;
     --core: #5cc2f2;
     --cell: rgba(189, 197, 204, 0.16);
