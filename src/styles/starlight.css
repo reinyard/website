@@ -975,9 +975,25 @@ footer .meta a {
   color: inherit;
   text-decoration: underline;
 }
+/* the splash hero, set like the home page's hero: the same title tracking, the same muted subtitle, and the same tight button row */
 .hero h1 {
   letter-spacing: -0.05em;
 }
+.hero .copy > :not(h1) {
+  max-width: 33rem;
+}
 .hero .tagline {
   color: var(--muted);
+  font-size: clamp(1.05rem, 1.7vw, 1.28rem);
+}
+.hero .actions {
+  gap: 0.75rem;
+  margin-top: 0.6rem;
+}
+.hero .actions .sl-link-button {
+  margin: 0;
+}
+.hero .actions .sl-link-button svg {
+  width: 1.05em;
+  height: 1.05em;
 }

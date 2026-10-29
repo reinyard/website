@@ -3,8 +3,11 @@
 // made transparent in starlight.css, so the page underneath shows through exactly as it does on the rest of the site.
 import Search from '@astrojs/starlight/components/Search.astro';
 import Nav from './Nav.astro';
+
+// Pages with a sidebar get Starlight's menu drawer on phones; pages without one (the splash template) get the pill's own menu.
+const { hasSidebar } = Astro.locals.starlightRoute;
 ---
 
-<Nav docs>
+<Nav docs menu={!hasSidebar}>
   <Search slot="search" />
 </Nav>
